@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bachelor Expense Splitter</title>
+  <style>
+    /* Strict 3-Color Palette: Red, Black, White */
+    :root {
+      --color-red: #D32F2F;
+      --color-black: #111111;
+      --color-white: #FFFFFF;
+      --color-light-gray: #F5F5F5;
+      --border-thick: 2px solid var(--color-black);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--color-white);
+      color: var(--color-black);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    /* Headings Typography */
+    h1, h2, h3, h4, .brand-logo {
+      font-family: "Tstar Bold", "Tstar", "Arial Black", sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+    }
+
+    header {
+      border-bottom: 4px solid var(--color-red);
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      font-size: 1.8rem;
+      color: var(--color-red);
+    }
+
+    .user-status {
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Auth & Section Cards */
+    .card {
+      background: var(--color-white);
+      border: var(--border-thick);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 4px 4px 0px var(--color-black);
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      color: var(--color-black);
+      border-left: 6px solid var(--color-red);
+      padding-left: 10px;
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+      border: var(--border-thick);
+      background: var(--color-white);
+      color: var(--color-black);
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      background-color: var(--color-light-gray);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      width: 100%;
+      background: var(--color-black);
+      color: var(--color-white);
+      font-family: "Tstar Bold", Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1rem;
+      text-transform: uppercase;
+      padding: 14px 20px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn:hover {
+      background: var(--color-red);
+    }
+
+    .btn-secondary {
+      background: var(--color-white);
+      color: var(--color-black);
+      border: var(--border-thick);
+      margin-top: 8px;
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-black);
+      color: var(--color-white);
+    }
+
+    /* Tags & Lists */
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      background: var(--color-black);
+      color: var(--color-white);
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tag span {
+      cursor: pointer;
+      color: var(--color-red);
+      font-weight: bold;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    th, td {
+      border: var(--border-thick);
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: var(--color-black);
+      color: var(--color-white);
+      font-family: "Tstar Bold", Arial, sans-serif;
+    }
+
+    /* Summary & Settlement Output */
+    .summary-box {
+      background: var(--color-light-gray);
+      border: var(--border-thick);
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .settlement-card {
+      border-left: 6px solid var(--color-red);
+      background: var(--color-white);
+      border-top: var(--border-thick);
+      border-right: var(--border-thick);
+      border-bottom: var(--border-thick);
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .settlement-card strong {
+      color: var(--color-red);
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="brand-logo">SPLIT.ROOM</div>
+      <div id="userBadge" class="user-status">Not Signed In</div>
+    </header>
+
+    <!-- SECTION 1: AUTHENTICATION -->
+    <section id="authSection" class="card">
+      <h2>1. Bachelor Sign In</h2>
+      <div class="form-group">
+        <label for="userNameInput">Your Name / Email</label>
+        <input type="text" id="userNameInput" placeholder="e.g., Laxman" />
+      </div>
+      <button class="btn" onclick="handleLogin()">Sign In to Dashboard</button>
+    </section>
+
+    <!-- MAIN APP DASHBOARD -->
+    <div id="appDashboard" class="hidden">
+
+      <!-- SECTION 2: ADD ROOMMATES -->
+      <section class="card">
+        <h2>2. Roommates Living Together</h2>
+        <div class="form-group grid-2">
+          <input type="text" id="roommateInput" placeholder="Enter roommate name (e.g., Vishal)" />
+          <button class="btn" onclick="addRoommate()">Add Member</button>
+        </div>
+        <div id="roommateList" class="tag-container"></div>
+      </section>
+
+      <!-- SECTION 3: EXPENSE ENTRY -->
+      <section class="card">
+        <h2>3. Add Monthly Expense</h2>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="payerSelect">Who Paid?</label>
+            <select id="payerSelect"></select>
+          </div>
+          <div class="form-group">
+            <label for="expenseName">Item / Bill Name</label>
+            <input type="text" id="expenseName" placeholder="e.g., Vegetables / Rent / Electricity" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="expenseAmount">Amount Paid (₹)</label>
+          <input type="number" id="expenseAmount" placeholder="e.g., 6000" />
+        </div>
+        <button class="btn" onclick="addExpense()">Record Spending</button>
+      </section>
+
+      <!-- SECTION 4: DETAILED SUMMARY & SETTLEMENT -->
+      <section class="card">
+        <h2>4. Financial Summary & Splitting</h2>
+        
+        <h3>Individual Spend Details</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Paid By</th>
+              <th>Amount (₹)</th>
+            </tr>
+          </thead>
+          <tbody id="expenseTableBody">
+            <tr><td colspan="3" style="text-align:center;">No expenses added yet.</td></tr>
+          </tbody>
+        </table>
+
+        <br />
+        <h3>Calculated Balances</h3>
+        <div id="breakdownSummary" class="summary-box">
+          Add members and spending above to see calculated splits.
+        </div>
+
+        <br />
+        <h3>Final Splitting Settlement</h3>
+        <p style="font-size:0.85rem; margin-bottom:12px;">Minimum transfers needed to equalize balances:</p>
+        <div id="settlementOutput"></div>
+
+        <button class="btn btn-secondary" onclick="resetAllData()">Reset All Room Data</button>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    // State management
+    let currentUser = "";
+    let roommates = [];
+    let expenses = [];
+
+    // Local Storage Initial Load
+    window.onload = function() {
+      const savedUser = localStorage.getItem("split_user");
+      const savedRoommates = localStorage.getItem("split_roommates");
+      const savedExpenses = localStorage.getItem("split_expenses");
+
+      if (savedUser) {
+        currentUser = savedUser;
+        document.getElementById("userBadge").innerText = `User: ${currentUser}`;
+        document.getElementById("authSection").classList.add("hidden");
+        document.getElementById("appDashboard").classList.remove("hidden");
+      }
+
+      if (savedRoommates) roommates = JSON.parse(savedRoommates);
+      if (savedExpenses) expenses = JSON.parse(savedExpenses);
+
+      renderApp();
+    };
+
+    function handleLogin() {
+      const input = document.getElementById("userNameInput").value.trim();
+      if (!input) return alert("Please enter your name.");
+      currentUser = input;
+      localStorage.setItem("split_user", currentUser);
+      
+      // Auto-add current user if not in list
+      if (!roommates.includes(currentUser)) {
+        roommates.push(currentUser);
+        localStorage.setItem("split_roommates", JSON.stringify(roommates));
+      }
+
+      document.getElementById("userBadge").innerText = `User: ${currentUser}`;
+      document.getElementById("authSection").classList.add("hidden");
+      document.getElementById("appDashboard").classList.remove("hidden");
+      renderApp();
+    }
+
+    function addRoommate() {
+      const input = document.getElementById("roommateInput");
+      const name = input.value.trim();
+      if (!name) return;
+      if (roommates.includes(name)) return alert("Member already added.");
+
+      roommates.push(name);
+      localStorage.setItem("split_roommates", JSON.stringify(roommates));
+      input.value = "";
+      renderApp();
+    }
+
+    function removeRoommate(name) {
+      roommates = roommates.filter(r => r !== name);
+      localStorage.setItem("split_roommates", JSON.stringify(roommates));
+      renderApp();
+    }
+
+    function addExpense() {
+      const payer = document.getElementById("payerSelect").value;
+      const item = document.getElementById("expenseName").value.trim();
+      const amount = parseFloat(document.getElementById("expenseAmount").value);
+
+      if (!payer || !item || isNaN(amount) || amount <= 0) {
+        return alert("Please fill all expense fields with valid amounts.");
+      }
+
+      expenses.push({ payer, item, amount });
+      localStorage.setItem("split_expenses", JSON.stringify(expenses));
+
+      document.getElementById("expenseName").value = "";
+      document.getElementById("expenseAmount").value = "";
+      renderApp();
+    }
+
+    function renderApp() {
+      renderRoommates();
+      renderPayerDropdown();
+      renderExpenseTable();
+      calculateSummary();
+    }
+
+    function renderRoommates() {
+      const container = document.getElementById("roommateList");
+      container.innerHTML = "";
+      roommates.forEach(name => {
+        const tag = document.createElement("div");
+        tag.className = "tag";
+        tag.innerHTML = `${name} <span onclick="removeRoommate('${name}')">&times;</span>`;
+        container.appendChild(tag);
+      });
+    }
+
+    function renderPayerDropdown() {
+      const select = document.getElementById("payerSelect");
+      select.innerHTML = "";
+      roommates.forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.innerText = name;
+        select.appendChild(option);
+      });
+    }
+
+    function renderExpenseTable() {
+      const tbody = document.getElementById("expenseTableBody");
+      tbody.innerHTML = "";
+
+      if (expenses.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No expenses added yet.</td></tr>`;
+        return;
+      }
+
+      expenses.forEach(exp => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${exp.item}</strong></td>
+          <td>${exp.payer}</td>
+          <td>₹ ${exp.amount.toFixed(2)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function calculateSummary() {
+      const breakdownBox = document.getElementById("breakdownSummary");
+      const settlementOutput = document.getElementById("settlementOutput");
+
+      if (roommates.length === 0) {
+        breakdownBox.innerHTML = "Please add roommates to calculate.";
+        settlementOutput.innerHTML = "";
+        return;
+      }
+
+      // 1. Calculate totals
+      let totalSpent = 0;
+      let spendingMap = {};
+      roommates.forEach(r => spendingMap[r] = 0);
+
+      expenses.forEach(exp => {
+        totalSpent += exp.amount;
+        if (spendingMap[exp.payer] !== undefined) {
+          spendingMap[exp.payer] += exp.amount;
+        }
+      });
+
+      const fairShare = totalSpent / roommates.length;
+
+      // Render spending map
+      let summaryHTML = `<p><strong>Total Spending:</strong> ₹ ${totalSpent.toFixed(2)}</p>`;
+      summaryHTML += `<p><strong>Fair Share Per Bachelor:</strong> ₹ ${fairShare.toFixed(2)}</p><hr style="margin:10px 0; border:1px solid #000;" />`;
+
+      let netBalances = {};
+
+      roommates.forEach(r => {
+        const spent = spendingMap[r];
+        const net = spent - fairShare; // Positive = owed money, Negative = owes money
+        netBalances[r] = net;
+
+        summaryHTML += `<p>• <strong>${r}</strong> spent ₹ ${spent.toFixed(2)} (${net >= 0 ? 'Gets back' : 'Owes'} ₹ ${Math.abs(net).toFixed(2)})</p>`;
+      });
+
+      breakdownBox.innerHTML = summaryHTML;
+
+      // 2. Settlement Calculation (Debt Minimization Algorithm)
+      let debtors = [];
+      let creditors = [];
+
+      for (let member in netBalances) {
+        let bal = netBalances[member];
+        if (bal < -0.01) debtors.push({ name: member, amount: -bal });
+        else if (bal > 0.01) creditors.push({ name: member, amount: bal });
+      }
+
+      settlementOutput.innerHTML = "";
+
+      if (debtors.length === 0 && creditors.length === 0) {
+        settlementOutput.innerHTML = `<div class="settlement-card">All expenses are equally balanced! No payments needed.</div>`;
+        return;
+      }
+
+      let transactions = [];
+      let i = 0, j = 0;
+
+      while (i < debtors.length && j < creditors.length) {
+        let debtor = debtors[i];
+        let creditor = creditors[j];
+
+        let minAmount = Math.min(debtor.amount, creditor.amount);
+
+        transactions.push(`${debtor.name} gives <strong>₹ ${minAmount.toFixed(2)}</strong> to ${creditor.name}`);
+
+        debtor.amount -= minAmount;
+        creditor.amount -= minAmount;
+
+        if (debtor.amount < 0.01) i++;
+        if (creditor.amount < 0.01) j++;
+      }
+
+      transactions.forEach(t => {
+        const card = document.createElement("div");
+        card.className = "settlement-card";
+        card.innerHTML = `<span>${t}</span>`;
+        settlementOutput.appendChild(card);
+      });
+    }
+
+    function resetAllData() {
+      if (confirm("Are you sure you want to reset all room expenses and members?")) {
+        localStorage.clear();
+        roommates = [];
+        expenses = [];
+        currentUser = "";
+        location.reload();
+      }
+    }
+  </script>
+</body>
+</html>
