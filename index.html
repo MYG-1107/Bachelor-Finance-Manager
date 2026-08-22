@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bachelor Expense Splitter</title>
+  <title>Bachelors Room Expense Splitter</title>
   <style>
-    /* Strict 3-Color Palette: Red, Black, White */
     :root {
-      --color-red: #D32F2F;
-      --color-black: #111111;
-      --color-white: #FFFFFF;
-      --color-light-gray: #F5F5F5;
-      --border-thick: 2px solid var(--color-black);
+      --bg-white: #ffffff;
+      --text-black: #111111;
+      --brand-red: #d32f2f;
+      --border-color: #000000;
+      --light-gray: #f4f4f4;
     }
 
     * {
@@ -21,508 +20,554 @@
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background-color: var(--color-white);
-      color: var(--color-black);
-      line-height: 1.6;
-      padding: 20px;
+      background-color: var(--bg-white);
+      color: var(--text-black);
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 400;
+      line-height: 1.5;
     }
 
-    /* Headings Typography */
-    h1, h2, h3, h4, .brand-logo {
-      font-family: "Tstar Bold", "Tstar", "Arial Black", sans-serif;
+    h1, h2, h3, h4 {
+      font-family: 'Tstar Bold', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       font-weight: 700;
       letter-spacing: -0.5px;
-      text-transform: uppercase;
     }
 
+    /* Header */
     header {
-      border-bottom: 4px solid var(--color-red);
-      padding-bottom: 20px;
-      margin-bottom: 30px;
+      border-bottom: 2px solid var(--border-color);
+      padding: 1.25rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: var(--bg-white);
     }
 
-    .brand-logo {
-      font-size: 1.8rem;
-      color: var(--color-red);
+    .brand-title {
+      font-size: 1.4rem;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .user-status {
-      font-size: 0.9rem;
+    .brand-tag {
+      background-color: var(--brand-red);
+      color: var(--bg-white);
+      font-size: 0.75rem;
+      padding: 2px 8px;
       font-weight: bold;
     }
 
+    /* Container */
     .container {
-      max-width: 900px;
-      margin: 0 auto;
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
 
-    /* Auth & Section Cards */
-    .card {
-      background: var(--color-white);
-      border: var(--border-thick);
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 4px 4px 0px var(--color-black);
+    /* Auth Screen */
+    .auth-card {
+      max-width: 420px;
+      margin: 4rem auto;
+      padding: 2rem;
+      border: 2px solid var(--border-color);
     }
 
-    h2 {
-      font-size: 1.4rem;
-      margin-bottom: 16px;
-      color: var(--color-black);
-      border-left: 6px solid var(--color-red);
-      padding-left: 10px;
+    /* Grid Layout */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
     }
 
-    /* Form Controls */
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Card Panels */
+    .panel {
+      border: 1px solid var(--border-color);
+      padding: 1.5rem;
+      background: var(--bg-white);
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-title {
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--brand-red);
+    }
+
+    /* Forms & Inputs */
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 1rem;
     }
 
     label {
       display: block;
+      font-size: 0.85rem;
       font-weight: bold;
-      margin-bottom: 6px;
-      font-size: 0.9rem;
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
     }
 
     input, select {
       width: 100%;
-      padding: 12px;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid var(--border-color);
+      font-size: 0.95rem;
       font-family: Arial, sans-serif;
-      font-size: 1rem;
-      border: var(--border-thick);
-      background: var(--color-white);
-      color: var(--color-black);
-      outline: none;
+      background: var(--bg-white);
+      color: var(--text-black);
     }
 
     input:focus, select:focus {
-      background-color: var(--color-light-gray);
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    @media (max-width: 600px) {
-      .grid-2 { grid-template-columns: 1fr; }
+      outline: 2px solid var(--brand-red);
     }
 
     /* Buttons */
     .btn {
       display: inline-block;
       width: 100%;
-      background: var(--color-black);
-      color: var(--color-white);
-      font-family: "Tstar Bold", Arial, sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
       font-weight: bold;
-      font-size: 1rem;
       text-transform: uppercase;
-      padding: 14px 20px;
-      border: none;
       cursor: pointer;
-      transition: background 0.2s ease;
+      border: 2px solid var(--border-color);
+      background-color: var(--text-black);
+      color: var(--bg-white);
+      transition: all 0.2s ease;
     }
 
     .btn:hover {
-      background: var(--color-red);
+      background-color: var(--brand-red);
+      border-color: var(--brand-red);
     }
 
     .btn-secondary {
-      background: var(--color-white);
-      color: var(--color-black);
-      border: var(--border-thick);
-      margin-top: 8px;
+      background-color: transparent;
+      color: var(--text-black);
     }
 
     .btn-secondary:hover {
-      background: var(--color-black);
-      color: var(--color-white);
+      background-color: var(--light-gray);
+      color: var(--text-black);
+      border-color: var(--border-color);
     }
 
-    /* Tags & Lists */
-    .tag-container {
+    .btn-delete {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--brand-red);
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-delete:hover {
+      background: var(--brand-red);
+      color: var(--bg-white);
+      border-color: var(--brand-red);
+    }
+
+    /* Member List */
+    .member-chips {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 0.5rem;
+      margin-top: 1rem;
     }
 
-    .tag {
-      background: var(--color-black);
-      color: var(--color-white);
-      padding: 6px 12px;
-      font-size: 0.85rem;
-      font-weight: bold;
+    .chip {
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    .tag span {
-      cursor: pointer;
-      color: var(--color-red);
-      font-weight: bold;
+      gap: 0.5rem;
+      padding: 0.3rem 0.75rem;
+      background: var(--light-gray);
+      border: 1px solid var(--border-color);
+      font-size: 0.85rem;
     }
 
     /* Tables */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 16px;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
     }
 
     th, td {
-      border: var(--border-thick);
-      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      padding: 0.65rem 0.5rem;
       text-align: left;
     }
 
     th {
-      background: var(--color-black);
-      color: var(--color-white);
-      font-family: "Tstar Bold", Arial, sans-serif;
+      border-bottom: 2px solid var(--border-color);
+      text-transform: uppercase;
+      font-size: 0.75rem;
     }
 
-    /* Summary & Settlement Output */
-    .summary-box {
-      background: var(--color-light-gray);
-      border: var(--border-thick);
-      padding: 16px;
-      margin-top: 16px;
-    }
-
-    .settlement-card {
-      border-left: 6px solid var(--color-red);
-      background: var(--color-white);
-      border-top: var(--border-thick);
-      border-right: var(--border-thick);
-      border-bottom: var(--border-thick);
-      padding: 12px 16px;
-      margin-bottom: 10px;
-      font-weight: bold;
+    /* Summary Stats */
+    .stat-box {
       display: flex;
       justify-content: space-between;
+      padding: 0.75rem;
+      background: var(--light-gray);
+      border-left: 4px solid var(--brand-red);
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    /* Settlement Cards */
+    .settlement-card {
+      border: 1px solid var(--border-color);
+      padding: 0.85rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .settlement-card strong {
-      color: var(--color-red);
+      color: var(--brand-red);
     }
 
-    .hidden { display: none !important; }
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <div class="brand-logo">SPLIT.ROOM</div>
-      <div id="userBadge" class="user-status">Not Signed In</div>
-    </header>
+  <!-- Header -->
+  <header>
+    <div class="brand-title">
+      <span>RoomSplit</span>
+      <span class="brand-tag">Warangal</span>
+    </div>
+    <div id="userStatus" class="hidden">
+      <span id="userNameDisplay" style="font-size: 0.85rem; margin-right: 10px; font-weight: bold;"></span>
+      <button class="btn btn-secondary" style="width: auto; padding: 4px 10px; font-size: 0.75rem;" onclick="logout()">Logout</button>
+    </div>
+  </header>
 
-    <!-- SECTION 1: AUTHENTICATION -->
-    <section id="authSection" class="card">
-      <h2>1. Bachelor Sign In</h2>
-      <div class="form-group">
-        <label for="userNameInput">Your Name / Email</label>
-        <input type="text" id="userNameInput" placeholder="e.g., Laxman" />
-      </div>
-      <button class="btn" onclick="handleLogin()">Sign In to Dashboard</button>
-    </section>
-
-    <!-- MAIN APP DASHBOARD -->
-    <div id="appDashboard" class="hidden">
-
-      <!-- SECTION 2: ADD ROOMMATES -->
-      <section class="card">
-        <h2>2. Roommates Living Together</h2>
-        <div class="form-group grid-2">
-          <input type="text" id="roommateInput" placeholder="Enter roommate name (e.g., Vishal)" />
-          <button class="btn" onclick="addRoommate()">Add Member</button>
-        </div>
-        <div id="roommateList" class="tag-container"></div>
-      </section>
-
-      <!-- SECTION 3: EXPENSE ENTRY -->
-      <section class="card">
-        <h2>3. Add Monthly Expense</h2>
-        <div class="grid-2">
-          <div class="form-group">
-            <label for="payerSelect">Who Paid?</label>
-            <select id="payerSelect"></select>
-          </div>
-          <div class="form-group">
-            <label for="expenseName">Item / Bill Name</label>
-            <input type="text" id="expenseName" placeholder="e.g., Vegetables / Rent / Electricity" />
-          </div>
+  <main class="container">
+    <!-- 1. Simple Login View -->
+    <div id="authSection" class="auth-card">
+      <h2 style="margin-bottom: 0.5rem;">Sign In</h2>
+      <p style="font-size: 0.85rem; margin-bottom: 1.5rem;">Enter your room details to manage monthly bachelor expenses.</p>
+      <form id="authForm">
+        <div class="form-group">
+          <label for="roomName">Room Identifier / Name</label>
+          <input type="text" id="roomName" placeholder="e.g., Room 302 - Kazipet" required />
         </div>
         <div class="form-group">
-          <label for="expenseAmount">Amount Paid (₹)</label>
-          <input type="number" id="expenseAmount" placeholder="e.g., 6000" />
+          <label for="leadName">Your Name</label>
+          <input type="text" id="leadName" placeholder="e.g., Laxman" required />
         </div>
-        <button class="btn" onclick="addExpense()">Record Spending</button>
-      </section>
+        <button type="submit" class="btn">Enter Room Dashboard</button>
+      </form>
+    </div>
 
-      <!-- SECTION 4: DETAILED SUMMARY & SETTLEMENT -->
-      <section class="card">
-        <h2>4. Financial Summary & Splitting</h2>
-        
-        <h3>Individual Spend Details</h3>
-        <table>
+    <!-- 2. Dashboard View -->
+    <div id="dashboardSection" class="hidden">
+      <div class="grid-2">
+        <!-- Roommates Manager -->
+        <section class="panel">
+          <h3 class="panel-title">1. Roommates (Bachelors)</h3>
+          <form id="addMemberForm" style="display: flex; gap: 0.5rem;">
+            <input type="text" id="memberName" placeholder="Friend Name (e.g., Vishal)" required />
+            <button type="submit" class="btn" style="width: 30%;">Add</button>
+          </form>
+          <div id="memberList" class="member-chips"></div>
+        </section>
+
+        <!-- Expenditure Form -->
+        <section class="panel">
+          <h3 class="panel-title">2. Add Room Expense</h3>
+          <form id="addExpenseForm">
+            <div class="form-group">
+              <label for="expensePayer">Who Paid?</label>
+              <select id="expensePayer" required></select>
+            </div>
+            <div class="form-group">
+              <label for="expenseItem">Item / Purpose</label>
+              <input type="text" id="expenseItem" placeholder="e.g., Room Rent, Current Bill, Veggies" required />
+            </div>
+            <div class="form-group">
+              <label for="expenseAmount">Amount (₹)</label>
+              <input type="number" id="expenseAmount" min="1" placeholder="e.g., 6000" required />
+            </div>
+            <button type="submit" class="btn">Record Expense</button>
+          </form>
+        </section>
+      </div>
+
+      <!-- Itemized Log -->
+      <section class="panel">
+        <h3 class="panel-title">3. Itemized Monthly Expenses</h3>
+        <table id="expenseTable">
           <thead>
             <tr>
-              <th>Item</th>
               <th>Paid By</th>
+              <th>Item</th>
               <th>Amount (₹)</th>
+              <th>Action</th>
             </tr>
           </thead>
-          <tbody id="expenseTableBody">
-            <tr><td colspan="3" style="text-align:center;">No expenses added yet.</td></tr>
-          </tbody>
+          <tbody id="expenseTableBody"></tbody>
         </table>
-
-        <br />
-        <h3>Calculated Balances</h3>
-        <div id="breakdownSummary" class="summary-box">
-          Add members and spending above to see calculated splits.
-        </div>
-
-        <br />
-        <h3>Final Splitting Settlement</h3>
-        <p style="font-size:0.85rem; margin-bottom:12px;">Minimum transfers needed to equalize balances:</p>
-        <div id="settlementOutput"></div>
-
-        <button class="btn btn-secondary" onclick="resetAllData()">Reset All Room Data</button>
       </section>
 
+      <!-- Final Settlement Summary -->
+      <section class="panel">
+        <h3 class="panel-title">4. Split & Settlement Summary</h3>
+        <div class="stat-box">
+          <span>Total Monthly Spend: <span id="totalSpendDisplay">₹0</span></span>
+          <span>Per Bachelor Share: <span id="perPersonShareDisplay">₹0</span></span>
+        </div>
+
+        <h4 style="margin-top: 1rem; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem;">Member Balances:</h4>
+        <table style="margin-bottom: 1.5rem;">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Total Paid</th>
+              <th>Net Status</th>
+            </tr>
+          </thead>
+          <tbody id="balanceTableBody"></tbody>
+        </table>
+
+        <h4 style="margin-top: 1rem; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem;">Who Pays Whom (Terminated Settlement):</h4>
+        <div id="settlementList"></div>
+      </section>
     </div>
-  </div>
+  </main>
 
   <script>
-    // State management
-    let currentUser = "";
-    let roommates = [];
-    let expenses = [];
+    // State management backed by localStorage
+    const STORAGE_KEY = 'ROOM_SPLIT_DATA';
 
-    // Local Storage Initial Load
-    window.onload = function() {
-      const savedUser = localStorage.getItem("split_user");
-      const savedRoommates = localStorage.getItem("split_roommates");
-      const savedExpenses = localStorage.getItem("split_expenses");
-
-      if (savedUser) {
-        currentUser = savedUser;
-        document.getElementById("userBadge").innerText = `User: ${currentUser}`;
-        document.getElementById("authSection").classList.add("hidden");
-        document.getElementById("appDashboard").classList.remove("hidden");
-      }
-
-      if (savedRoommates) roommates = JSON.parse(savedRoommates);
-      if (savedExpenses) expenses = JSON.parse(savedExpenses);
-
-      renderApp();
+    let state = {
+      user: null,
+      members: [],
+      expenses: []
     };
 
-    function handleLogin() {
-      const input = document.getElementById("userNameInput").value.trim();
-      if (!input) return alert("Please enter your name.");
-      currentUser = input;
-      localStorage.setItem("split_user", currentUser);
-      
-      // Auto-add current user if not in list
-      if (!roommates.includes(currentUser)) {
-        roommates.push(currentUser);
-        localStorage.setItem("split_roommates", JSON.stringify(roommates));
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        state = JSON.parse(saved);
       }
-
-      document.getElementById("userBadge").innerText = `User: ${currentUser}`;
-      document.getElementById("authSection").classList.add("hidden");
-      document.getElementById("appDashboard").classList.remove("hidden");
-      renderApp();
+      render();
     }
 
-    function addRoommate() {
-      const input = document.getElementById("roommateInput");
-      const name = input.value.trim();
-      if (!name) return;
-      if (roommates.includes(name)) return alert("Member already added.");
-
-      roommates.push(name);
-      localStorage.setItem("split_roommates", JSON.stringify(roommates));
-      input.value = "";
-      renderApp();
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      render();
     }
 
-    function removeRoommate(name) {
-      roommates = roommates.filter(r => r !== name);
-      localStorage.setItem("split_roommates", JSON.stringify(roommates));
-      renderApp();
-    }
+    // Authentication Handlers
+    document.getElementById('authForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const leadName = document.getElementById('leadName').value.trim();
+      const roomName = document.getElementById('roomName').value.trim();
 
-    function addExpense() {
-      const payer = document.getElementById("payerSelect").value;
-      const item = document.getElementById("expenseName").value.trim();
-      const amount = parseFloat(document.getElementById("expenseAmount").value);
-
-      if (!payer || !item || isNaN(amount) || amount <= 0) {
-        return alert("Please fill all expense fields with valid amounts.");
+      state.user = { leadName, roomName };
+      if (!state.members.includes(leadName)) {
+        state.members.push(leadName);
       }
+      saveState();
+    });
 
-      expenses.push({ payer, item, amount });
-      localStorage.setItem("split_expenses", JSON.stringify(expenses));
-
-      document.getElementById("expenseName").value = "";
-      document.getElementById("expenseAmount").value = "";
-      renderApp();
+    function logout() {
+      state.user = null;
+      saveState();
     }
 
-    function renderApp() {
-      renderRoommates();
-      renderPayerDropdown();
-      renderExpenseTable();
-      calculateSummary();
-    }
+    // Member Management
+    document.getElementById('addMemberForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('memberName').value.trim();
+      if (name && !state.members.includes(name)) {
+        state.members.push(name);
+        document.getElementById('memberName').value = '';
+        saveState();
+      }
+    });
 
-    function renderRoommates() {
-      const container = document.getElementById("roommateList");
-      container.innerHTML = "";
-      roommates.forEach(name => {
-        const tag = document.createElement("div");
-        tag.className = "tag";
-        tag.innerHTML = `${name} <span onclick="removeRoommate('${name}')">&times;</span>`;
-        container.appendChild(tag);
-      });
-    }
-
-    function renderPayerDropdown() {
-      const select = document.getElementById("payerSelect");
-      select.innerHTML = "";
-      roommates.forEach(name => {
-        const option = document.createElement("option");
-        option.value = name;
-        option.innerText = name;
-        select.appendChild(option);
-      });
-    }
-
-    function renderExpenseTable() {
-      const tbody = document.getElementById("expenseTableBody");
-      tbody.innerHTML = "";
-
-      if (expenses.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No expenses added yet.</td></tr>`;
+    function removeMember(name) {
+      if (state.expenses.some(exp => exp.payer === name)) {
+        alert(`${name} has recorded expenses. Remove their expenses first.`);
         return;
       }
-
-      expenses.forEach(exp => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${exp.item}</strong></td>
-          <td>${exp.payer}</td>
-          <td>₹ ${exp.amount.toFixed(2)}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+      state.members = state.members.filter(m => m !== name);
+      saveState();
     }
 
-    function calculateSummary() {
-      const breakdownBox = document.getElementById("breakdownSummary");
-      const settlementOutput = document.getElementById("settlementOutput");
+    // Expense Management
+    document.getElementById('addExpenseForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const payer = document.getElementById('expensePayer').value;
+      const item = document.getElementById('expenseItem').value.trim();
+      const amount = parseFloat(document.getElementById('expenseAmount').value);
 
-      if (roommates.length === 0) {
-        breakdownBox.innerHTML = "Please add roommates to calculate.";
-        settlementOutput.innerHTML = "";
-        return;
+      if (payer && item && amount > 0) {
+        state.expenses.push({ id: Date.now(), payer, item, amount });
+        document.getElementById('expenseItem').value = '';
+        document.getElementById('expenseAmount').value = '';
+        saveState();
       }
+    });
 
-      // 1. Calculate totals
-      let totalSpent = 0;
-      let spendingMap = {};
-      roommates.forEach(r => spendingMap[r] = 0);
+    function deleteExpense(id) {
+      state.expenses = state.expenses.filter(e => e.id !== id);
+      saveState();
+    }
 
-      expenses.forEach(exp => {
-        totalSpent += exp.amount;
-        if (spendingMap[exp.payer] !== undefined) {
-          spendingMap[exp.payer] += exp.amount;
+    // Settlement Algorithm
+    function calculateSettlement() {
+      const numMembers = state.members.length;
+      if (numMembers === 0) return { total: 0, perPerson: 0, balances: {}, transfers: [] };
+
+      let total = 0;
+      const paidBy = {};
+      state.members.forEach(m => paidBy[m] = 0);
+
+      state.expenses.forEach(e => {
+        total += e.amount;
+        if (paidBy[e.payer] !== undefined) {
+          paidBy[e.payer] += e.amount;
         }
       });
 
-      const fairShare = totalSpent / roommates.length;
+      const perPerson = total / numMembers;
+      const balances = {};
+      const debtors = [];
+      const creditors = [];
 
-      // Render spending map
-      let summaryHTML = `<p><strong>Total Spending:</strong> ₹ ${totalSpent.toFixed(2)}</p>`;
-      summaryHTML += `<p><strong>Fair Share Per Bachelor:</strong> ₹ ${fairShare.toFixed(2)}</p><hr style="margin:10px 0; border:1px solid #000;" />`;
-
-      let netBalances = {};
-
-      roommates.forEach(r => {
-        const spent = spendingMap[r];
-        const net = spent - fairShare; // Positive = owed money, Negative = owes money
-        netBalances[r] = net;
-
-        summaryHTML += `<p>• <strong>${r}</strong> spent ₹ ${spent.toFixed(2)} (${net >= 0 ? 'Gets back' : 'Owes'} ₹ ${Math.abs(net).toFixed(2)})</p>`;
+      state.members.forEach(m => {
+        const net = paidBy[m] - perPerson;
+        balances[m] = { paid: paidBy[m], net: net };
+        if (net < -0.01) {
+          debtors.push({ name: m, amount: -net });
+        } else if (net > 0.01) {
+          creditors.push({ name: m, amount: net });
+        }
       });
 
-      breakdownBox.innerHTML = summaryHTML;
+      // Greedy settlement match
+      const transfers = [];
+      let d = 0, c = 0;
+      while (d < debtors.length && c < creditors.length) {
+        const match = Math.min(debtors[d].amount, creditors[c].amount);
+        transfers.push({
+          from: debtors[d].name,
+          to: creditors[c].name,
+          amount: match
+        });
 
-      // 2. Settlement Calculation (Debt Minimization Algorithm)
-      let debtors = [];
-      let creditors = [];
+        debtors[d].amount -= match;
+        creditors[c].amount -= match;
 
-      for (let member in netBalances) {
-        let bal = netBalances[member];
-        if (bal < -0.01) debtors.push({ name: member, amount: -bal });
-        else if (bal > 0.01) creditors.push({ name: member, amount: bal });
+        if (debtors[d].amount < 0.01) d++;
+        if (creditors[c].amount < 0.01) c++;
       }
 
-      settlementOutput.innerHTML = "";
+      return { total, perPerson, balances, transfers };
+    }
 
-      if (debtors.length === 0 && creditors.length === 0) {
-        settlementOutput.innerHTML = `<div class="settlement-card">All expenses are equally balanced! No payments needed.</div>`;
+    // Render Function
+    function render() {
+      const authSec = document.getElementById('authSection');
+      const dashSec = document.getElementById('dashboardSection');
+      const userStatus = document.getElementById('userStatus');
+
+      if (!state.user) {
+        authSec.classList.remove('hidden');
+        dashSec.classList.add('hidden');
+        userStatus.classList.add('hidden');
         return;
       }
 
-      let transactions = [];
-      let i = 0, j = 0;
+      authSec.classList.add('hidden');
+      dashSec.classList.remove('hidden');
+      userStatus.classList.remove('hidden');
+      document.getElementById('userNameDisplay').textContent = `${state.user.leadName} (${state.user.roomName})`;
 
-      while (i < debtors.length && j < creditors.length) {
-        let debtor = debtors[i];
-        let creditor = creditors[j];
+      // Render Members
+      const memberList = document.getElementById('memberList');
+      memberList.innerHTML = state.members.map(m => `
+        <div class="chip">
+          <span>${m}</span>
+          ${m !== state.user.leadName ? `<button class="btn-delete" onclick="removeMember('${m}')">×</button>` : ''}
+        </div>
+      `).join('');
 
-        let minAmount = Math.min(debtor.amount, creditor.amount);
+      // Render Dropdown
+      const payerSelect = document.getElementById('expensePayer');
+      payerSelect.innerHTML = `<option value="">Select Roommate</option>` +
+        state.members.map(m => `<option value="${m}">${m}</option>`).join('');
 
-        transactions.push(`${debtor.name} gives <strong>₹ ${minAmount.toFixed(2)}</strong> to ${creditor.name}`);
-
-        debtor.amount -= minAmount;
-        creditor.amount -= minAmount;
-
-        if (debtor.amount < 0.01) i++;
-        if (creditor.amount < 0.01) j++;
+      // Render Expenses Table
+      const expenseBody = document.getElementById('expenseTableBody');
+      if (state.expenses.length === 0) {
+        expenseBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#666;">No expenses added yet.</td></tr>`;
+      } else {
+        expenseBody.innerHTML = state.expenses.map(e => `
+          <tr>
+            <td><strong>${e.payer}</strong></td>
+            <td>${e.item}</td>
+            <td>₹${e.amount.toFixed(2)}</td>
+            <td><button class="btn-delete" onclick="deleteExpense(${e.id})">Delete</button></td>
+          </tr>
+        `).join('');
       }
 
-      transactions.forEach(t => {
-        const card = document.createElement("div");
-        card.className = "settlement-card";
-        card.innerHTML = `<span>${t}</span>`;
-        settlementOutput.appendChild(card);
-      });
-    }
+      // Render Summary
+      const summary = calculateSettlement();
+      document.getElementById('totalSpendDisplay').textContent = `₹${summary.total.toFixed(2)}`;
+      document.getElementById('perPersonShareDisplay').textContent = `₹${summary.perPerson.toFixed(2)}`;
 
-    function resetAllData() {
-      if (confirm("Are you sure you want to reset all room expenses and members?")) {
-        localStorage.clear();
-        roommates = [];
-        expenses = [];
-        currentUser = "";
-        location.reload();
+      const balanceBody = document.getElementById('balanceTableBody');
+      balanceBody.innerHTML = state.members.map(m => {
+        const b = summary.balances[m] || { paid: 0, net: 0 };
+        const statusText = b.net >= 0 
+          ? `<span style="color: var(--brand-red); font-weight:bold;">Gets Back ₹${b.net.toFixed(2)}</span>` 
+          : `<span style="color: var(--text-black);">Owes ₹${Math.abs(b.net).toFixed(2)}</span>`;
+        return `
+          <tr>
+            <td>${m}</td>
+            <td>₹${b.paid.toFixed(2)}</td>
+            <td>${statusText}</td>
+          </tr>
+        `;
+      }).join('');
+
+      const settlementList = document.getElementById('settlementList');
+      if (summary.transfers.length === 0) {
+        settlementList.innerHTML = `<p style="font-size:0.9rem; color:#666;">All balances settled or no spending logged.</p>`;
+      } else {
+        settlementList.innerHTML = summary.transfers.map(t => `
+          <div class="settlement-card">
+            <div><strong>${t.from}</strong> pays <strong>${t.to}</strong></div>
+            <div style="font-size: 1.1rem; font-weight: bold;">₹${t.amount.toFixed(2)}</div>
+          </div>
+        `).join('');
       }
     }
+
+    // Initialize on page load
+    loadState();
   </script>
 </body>
 </html>
