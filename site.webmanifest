@@ -1,0 +1,10 @@
+{
+  "name": "Bachelor Finance Manager",
+  "short_name": "BFM",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#102a43",
+  "description": "Local-first expense sharing and settlement for roommates and shared flats.",
+  "icons": [{"src":"favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

@@ -1,267 +1,130 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bachelors Finance Manager</title>
-  <!-- Modern Scandinavian Typography & Inter Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Bachelor Finance Manager is a local-first expense sharing app for roommates, students and shared flats. Track expenses, split by participants, calculate balances and export reports.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#102a43">
+  <meta name="application-name" content="Bachelor Finance Manager">
+  <link rel="canonical" href="https://myg-1107.github.io/Bachelor-Finance-Manager/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Bachelor Finance Manager | Shared Expense Settlement">
+  <meta property="og:description" content="Track shared-flat expenses, split bills by participants, calculate balances and export clean reports.">
+  <meta property="og:url" content="https://myg-1107.github.io/Bachelor-Finance-Manager/">
+  <meta property="og:site_name" content="Bachelor Finance Manager">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Bachelor Finance Manager">
+  <meta name="twitter:description" content="A local-first shared expense manager for roommates and students.">
+  <title>Bachelor Finance Manager | Shared Expense Settlement</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebApplication",
+    "name":"Bachelor Finance Manager",
+    "url":"https://myg-1107.github.io/Bachelor-Finance-Manager/",
+    "applicationCategory":"FinanceApplication",
+    "operatingSystem":"Any",
+    "description":"A local-first shared expense manager for roommates, students and shared flats.",
+    "author":[{"@type":"Person","name":"Mallarapu Yaswanth"},{"@type":"Person","name":"Puppireddy Vishwateja"}]
+  }
+  </script>
 </head>
 <body>
+<a class="skip-link" href="#mainContent">Skip to main content</a>
+<div class="top-accent" aria-hidden="true"></div>
 
-  <!-- Top Decorative Accent -->
-  <div class="nav-top-bar"></div>
-
-  <!-- Global Header (UDI / NAV Inspired) -->
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="index.html" class="brand-link">
-        <!-- Logo Slot: Replace this image src with your logo link -->
-        <div class="brand-logo-container">
-          <img 
-            id="brandLogo" 
-            src="https://raw.githubusercontent.com/feathericons/feather/master/icons/pie-chart.svg" 
-            alt="Logo" 
-            class="brand-logo" 
-          />
-        </div>
-        <div class="brand-text">
-          <span class="brand-name">Bachelors Finance Manager</span>
-          <span class="brand-subtitle">Shared Flat & Room Expense Settlement</span>
-        </div>
-      </a>
-
-      <nav class="header-nav no-print">
-        <div id="sessionBadge" class="session-badge hidden">
-          <div class="session-info">
-            <span class="session-label">Current Room</span>
-            <span id="sessionRoomName" class="session-name">--</span>
-          </div>
-          <button class="nav-btn nav-btn-outline" onclick="logoutSession()">Switch Room</button>
-        </div>
-        <a href="developer.html" class="nav-link">Developer & Tech Docs</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero / Breadcrumb Bar -->
-  <section class="sub-header no-print">
-    <div class="container sub-header-inner">
-      <div class="breadcrumb">
-        <span>Shared Services</span> &nbsp;/&nbsp; <strong>Expense Balancer</strong>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand-link" href="./" aria-label="Bachelor Finance Manager home">
+      <span class="brand-mark" aria-hidden="true">₹</span>
+      <span class="brand-copy"><strong>Bachelor Finance Manager</strong><span>Shared expense settlement</span></span>
+    </a>
+    <nav class="header-nav" aria-label="Primary navigation">
+      <div id="sessionBadge" class="session-badge hidden">
+        <span class="session-info"><span class="session-label">Workspace</span><strong id="sessionRoomName">—</strong></span>
+        <button class="btn btn-outline btn-small" type="button" data-action="switch-workspace">Switch</button>
       </div>
-      <div id="activeUserGreeting" class="user-greeting"></div>
-    </div>
-  </section>
+      <a class="nav-link" href="developer.html">Engineering</a>
+      <a class="nav-link" href="privacy.html">Privacy</a>
+    </nav>
+  </div>
+</header>
 
-  <main class="container">
-    
-    <!-- 1. SIGN IN / ROOM INITIALIZATION PANEL -->
-    <section id="authCard" class="card card-center">
-      <div class="card-header-accent">
-        <h2>Enter Room Manager</h2>
-        <p>Manage monthly bachelors accommodation spending, food expenses, and bills.</p>
+<main id="mainContent" class="container page-shell">
+  <section id="landingScreen" aria-labelledby="landingTitle">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">LOCAL-FIRST · NO ACCOUNT REQUIRED</div>
+        <h1 id="landingTitle">Split shared-flat expenses without the spreadsheet headache.</h1>
+        <p class="hero-lead">Record bills, choose who shared each expense, calculate who owes whom, and keep a clean, exportable record in your browser.</p>
+        <div class="hero-points" aria-label="Product highlights"><span>Exact paise arithmetic</span><span>Flexible participants</span><span>CSV + JSON backup</span><span>Print-ready report</span></div>
+        <div class="hero-actions"><button class="btn btn-secondary" type="button" data-action="demo">Try demo workspace</button><a class="btn btn-ghost" href="#howItWorks">See how it works</a></div>
       </div>
-      <form id="authForm" class="form-body">
-        <div class="form-group">
-          <label for="roomNameInput">Room / Flat Identifier</label>
-          <span class="field-hint">e.g., Room 302 - Warangal Hostels, Green Valley Flat 4B</span>
-          <input type="text" id="roomNameInput" placeholder="Enter flat or room name" required />
-        </div>
+      <aside class="hero-panel"><div class="hero-panel-top"><span class="status-dot"></span><span>Browser workspace</span></div><div class="hero-panel-number">₹</div><div class="hero-panel-title">Simple inputs → clear settlement plan</div><p>No server is required for everyday use. Your workspace is stored locally until you export or clear it.</p></aside>
+    </div>
 
-        <div class="form-group">
-          <label for="adminNameInput">Your Name (Account Creator)</label>
-          <span class="field-hint">e.g., Laxman, Vishal</span>
-          <input type="text" id="adminNameInput" placeholder="Enter your full name" required />
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-block">Access Dashboard</button>
+    <section class="card workspace-card" aria-labelledby="createWorkspaceTitle">
+      <div class="section-heading"><div><span class="section-kicker">Start here</span><h2 id="createWorkspaceTitle">Create or open a workspace</h2></div><p id="existingWorkspaceHint" class="muted">Create your first workspace. No account is required.</p></div>
+      <form id="workspaceForm" class="form-grid">
+        <div class="form-group"><label for="workspaceNameInput">Workspace name</label><input id="workspaceNameInput" maxlength="80" autocomplete="organization" placeholder="Example: Green Valley Flat 4B" required><span class="field-hint">Use a name you will recognize on this device.</span></div>
+        <div class="form-group"><label for="ownerNameInput">Your name</label><input id="ownerNameInput" maxlength="60" autocomplete="name" placeholder="Example: Yaswanth" required><span class="field-hint">Used as the workspace owner label.</span></div>
+        <div class="form-actions"><button class="btn btn-primary" type="submit">Create / Open workspace</button></div>
       </form>
     </section>
 
-    <!-- 2. MAIN ACTIVE DASHBOARD -->
-    <div id="dashboardView" class="hidden">
-      
-      <!-- KPI Overview Bar -->
-      <section class="kpi-grid no-print">
-        <div class="kpi-card">
-          <span class="kpi-tag">Total Spent</span>
-          <span class="kpi-value" id="kpiTotalExpenditure">₹0.00</span>
-          <span class="kpi-subtext">Sum of all bills logged this month</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-tag">Bachelors Sharing</span>
-          <span class="kpi-value" id="kpiTotalMembers">0</span>
-          <span class="kpi-subtext">Active roommates in room pool</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-tag">Per Bachelor Share</span>
-          <span class="kpi-value kpi-red" id="kpiPerPersonShare">₹0.00</span>
-          <span class="kpi-subtext">Equal split target per member</span>
-        </div>
-        <div class="kpi-card kpi-action-card">
-          <span class="kpi-tag">Export Center</span>
-          <button class="btn btn-secondary btn-block" onclick="window.print()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
-            Print A4 / Save PDF
-          </button>
-        </div>
-      </section>
+    <section class="workspace-list-section" aria-labelledby="savedWorkspacesTitle"><div class="section-heading"><div><span class="section-kicker">Saved locally</span><h2 id="savedWorkspacesTitle">Your workspaces</h2></div></div><div id="workspaceList" class="workspace-list"></div></section>
 
-      <!-- Input Grids -->
-      <div class="grid-2-col no-print">
-        <!-- Roommates Column -->
-        <div class="card">
-          <div class="card-header">
-            <h3>1. Roommates</h3>
-            <span class="badge-count" id="memberCountBadge">0 members</span>
-          </div>
-          <form id="addMemberForm" class="form-inline">
-            <input type="text" id="newMemberInput" placeholder="Add roommate (e.g. Sairam)" required />
-            <button type="submit" class="btn btn-primary">Add</button>
-          </form>
-          <div class="chip-container" id="memberChipList"></div>
-        </div>
+    <section id="howItWorks" class="how-section" aria-labelledby="howTitle"><div class="section-heading"><div><span class="section-kicker">Workflow</span><h2 id="howTitle">How it works</h2></div></div><div class="step-grid">
+      <article class="step-card"><span class="step-number">01</span><h3>Add roommates</h3><p>Keep the active sharing group in one workspace and add people as they join.</p></article>
+      <article class="step-card"><span class="step-number">02</span><h3>Record expenses</h3><p>Choose who paid, what the expense was, when it happened, and exactly who shared it.</p></article>
+      <article class="step-card"><span class="step-number">03</span><h3>Settle clearly</h3><p>See contributions, obligations and a practical transfer plan without doing the math by hand.</p></article>
+    </div></section>
+  </section>
 
-        <!-- Expense Entry Column -->
-        <div class="card">
-          <div class="card-header">
-            <h3>2. Log New Expense</h3>
-          </div>
-          <form id="addExpenseForm" class="form-body">
-            <div class="form-row">
-              <div class="form-group flex-1">
-                <label for="expensePayerSelect">Paid By</label>
-                <select id="expensePayerSelect" required></select>
-              </div>
-              <div class="form-group flex-1">
-                <label for="expenseCategorySelect">Category</label>
-                <select id="expenseCategorySelect" required>
-                  <option value="Room Rent">Room Rent</option>
-                  <option value="Electricity / Power Bill">Electricity / Power Bill</option>
-                  <option value="Groceries & Veggies">Groceries & Veggies</option>
-                  <option value="Water Bill / Tanker">Water Bill / Tanker</option>
-                  <option value="Drinking Water Cans">Drinking Water Cans</option>
-                  <option value="WiFi & Broadband">WiFi & Broadband</option>
-                  <option value="LPG Gas Cylinder">LPG Gas Cylinder</option>
-                  <option value="Room Maintenance">Room Maintenance</option>
-                  <option value="Other">Other Miscellaneous</option>
-                </select>
-              </div>
-            </div>
+  <section id="dashboardView" class="hidden" aria-labelledby="dashboardTitle">
+    <div class="dashboard-hero"><div><div class="eyebrow">ACTIVE WORKSPACE</div><h1 id="dashboardTitle">Workspace</h1><p id="dashboardSubtitle" class="hero-lead compact">—</p><p id="activeUserGreeting" class="muted"></p></div><div class="dashboard-actions"><button class="btn btn-secondary" type="button" data-action="print">Print / Save PDF</button><button class="btn btn-primary" type="button" data-action="export-csv">Export CSV</button></div></div>
 
-            <div class="form-row">
-              <div class="form-group flex-2">
-                <label for="expenseItemInput">Item Description</label>
-                <input type="text" id="expenseItemInput" placeholder="e.g., September flat rent advance" required />
-              </div>
-              <div class="form-group flex-1">
-                <label for="expenseAmountInput">Amount (₹)</label>
-                <input type="number" id="expenseAmountInput" min="1" step="0.01" placeholder="6000" required />
-              </div>
-            </div>
+    <section class="kpi-grid" aria-label="Workspace summary">
+      <article class="kpi-card"><span class="kpi-label">Selected spend</span><strong id="kpiTotalExpenditure" class="kpi-value">₹0.00</strong><span id="periodSummary" class="kpi-subtext">All recorded expenses</span></article>
+      <article class="kpi-card"><span class="kpi-label">Roommates</span><strong id="kpiTotalMembers" class="kpi-value">0</strong><span class="kpi-subtext">People in this workspace</span></article>
+      <article class="kpi-card"><span class="kpi-label">Average spend / member</span><strong id="kpiPerPersonShare" class="kpi-value">₹0.00</strong><span class="kpi-subtext">Reference value for the selected period</span></article>
+      <article class="kpi-card kpi-accent"><span class="kpi-label">Transfers needed</span><strong id="kpiSettlementCount" class="kpi-value">0</strong><span class="kpi-subtext">Suggested settlement payments</span></article>
+    </section>
 
-            <button type="submit" class="btn btn-primary btn-block">Record Expense</button>
-          </form>
-        </div>
-      </div>
+    <section class="input-grid" aria-label="Workspace inputs">
+      <article class="card"><div class="card-heading"><div><span class="section-kicker">01</span><h2>Roommates</h2></div><span id="memberCountBadge" class="count-badge">0 members</span></div><form id="addMemberForm" class="inline-form"><label class="sr-only" for="newMemberInput">New roommate name</label><input id="newMemberInput" maxlength="60" placeholder="Add roommate" required><button class="btn btn-primary" type="submit">Add</button></form><div id="memberChipList" class="chip-container" aria-live="polite"></div></article>
 
-      <!-- Printable Monthly Report Output -->
-      <section class="card print-sheet">
-        <!-- Print Header -->
-        <div class="print-only-header">
-          <div class="print-meta">
-            <h1 class="print-main-title" id="printReportTitle">Room Monthly Settlement Statement</h1>
-            <p id="printGeneratedTimestamp"></p>
-          </div>
-          <div class="print-badge">
-            Official Balance Sheet
-          </div>
-        </div>
+      <article class="card"><div class="card-heading"><div><span class="section-kicker">02</span><h2>Log expense</h2></div><span class="muted">Money is stored as paise</span></div>
+        <form id="addExpenseForm" class="form-stack">
+          <div class="form-row"><div class="form-group"><label for="expensePayerSelect">Paid by</label><select id="expensePayerSelect" name="payer" required></select></div><div class="form-group"><label for="expenseCategorySelect">Category</label><select id="expenseCategorySelect" name="category"><option>Room Rent</option><option>Groceries</option><option>Electricity</option><option>Water</option><option>WiFi</option><option>Gas</option><option>Maintenance</option><option>Travel</option><option>Other</option></select></div></div>
+          <div class="form-row"><div class="form-group form-grow"><label for="expenseDescriptionInput">Description</label><input id="expenseDescriptionInput" name="description" maxlength="120" placeholder="Example: September flat rent" required></div><div class="form-group"><label for="expenseAmountInput">Amount (₹)</label><input id="expenseAmountInput" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="6000.00" required></div></div>
+          <div class="form-group"><label for="expenseDateInput">Expense date</label><input id="expenseDateInput" name="date" type="date" required></div>
+          <fieldset class="participant-fieldset"><div class="fieldset-heading"><legend>Split with</legend><div class="mini-actions"><button type="button" class="text-button" data-action="select-all">All</button><button type="button" class="text-button" data-action="clear-all">Clear</button></div></div><p class="field-hint">Only selected roommates share this expense. Different participant counts are supported.</p><div id="participantList" class="participant-list"></div></fieldset>
+          <button class="btn btn-primary btn-block" type="submit">Record expense</button>
+        </form>
+      </article>
+    </section>
 
-        <!-- Ledger Table -->
-        <div class="section-title-wrap">
-          <h3>3. Itemized Expenditure Ledger</h3>
-        </div>
-        <div class="table-responsive">
-          <table class="nav-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Paid By</th>
-                <th>Category</th>
-                <th>Item / Description</th>
-                <th class="text-right">Amount (₹)</th>
-                <th class="no-print text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody id="expenseTableRows"></tbody>
-          </table>
-        </div>
+    <section class="card filters-card" aria-labelledby="filtersTitle"><div class="section-heading compact-heading"><div><span class="section-kicker">03</span><h2 id="filtersTitle">Ledger filters</h2></div><span id="ledgerCount" class="muted"></span></div><div class="filter-grid"><div class="form-group form-grow"><label for="expenseSearch">Search</label><input id="expenseSearch" type="search" placeholder="Search description, payer or category" autocomplete="off"></div><div class="form-group"><label for="monthFilter">Period</label><select id="monthFilter"><option value="all">All time</option></select></div><div class="form-group"><label for="categoryFilter">Category</label><select id="categoryFilter"><option value="all">All categories</option></select></div></div></section>
 
-        <!-- Balances and Settlements -->
-        <div class="settlement-section">
-          <div class="section-title-wrap" style="margin-top: 2rem;">
-            <h3>4. Account Split & Settlement Balances</h3>
-          </div>
+    <section class="card" aria-labelledby="ledgerTitle"><div class="section-heading compact-heading"><div><span class="section-kicker">04</span><h2 id="ledgerTitle">Expense ledger</h2></div></div><div class="table-responsive"><table class="data-table"><caption class="sr-only">Expense ledger</caption><thead><tr><th>Date</th><th>Paid by</th><th>Category</th><th>Description</th><th class="text-right">Amount</th><th class="text-center no-print">Action</th></tr></thead><tbody id="expenseTableRows"></tbody></table></div></section>
 
-          <div class="table-responsive">
-            <table class="nav-table">
-              <thead>
-                <tr>
-                  <th>Roommate</th>
-                  <th class="text-right">Total Contributed</th>
-                  <th class="text-right">Equal Share Obligation</th>
-                  <th class="text-center">Net Balance Status</th>
-                </tr>
-              </thead>
-              <tbody id="balancesTableRows"></tbody>
-            </table>
-          </div>
+    <section class="insight-grid"><article class="card"><div class="section-heading compact-heading"><div><span class="section-kicker">05</span><h2>Spend by category</h2></div></div><div id="categoryChart" class="bar-chart"></div></article><article class="card"><div class="section-heading compact-heading"><div><span class="section-kicker">06</span><h2>Who paid what</h2></div></div><div id="memberChart" class="bar-chart"></div></article></section>
 
-          <div class="section-title-wrap" style="margin-top: 2rem;">
-            <h3>5. Required Settlements (Minimum Cash Transfers)</h3>
-            <p class="section-subtitle">Simplified transactions to clear all room dues without circular payments.</p>
-          </div>
-          
-          <div id="transferInstructionsContainer" class="transfer-list"></div>
-        </div>
-      </section>
+    <section class="card" aria-labelledby="balancesTitle"><div class="section-heading compact-heading"><div><span class="section-kicker">07</span><h2 id="balancesTitle">Balances</h2></div><span class="muted">Paid amount vs. share obligation</span></div><div class="table-responsive"><table class="data-table"><caption class="sr-only">Roommate balance summary</caption><thead><tr><th>Roommate</th><th class="text-right">Paid</th><th class="text-right">Share obligation</th><th class="text-center">Status</th></tr></thead><tbody id="balancesTableRows"></tbody></table></div></section>
 
-    </div>
-  </main>
+    <section class="card" aria-labelledby="settlementTitle"><div class="section-heading compact-heading"><div><span class="section-kicker">08</span><h2 id="settlementTitle">Suggested settlement</h2></div><span class="muted">A practical transfer plan for the selected period</span></div><div id="transferInstructionsContainer" class="transfer-list"></div></section>
 
-  <!-- Global Footer -->
-  <footer class="site-footer no-print">
-    <div class="container footer-grid">
-      <div class="footer-col">
-        <h4>Bachelors Finance Manager</h4>
-        <p>A fast, transparent, zero-telemetry room finance solver tailored for shared bachelor accommodations, hostel flats, and students.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Direct Navigation</h4>
-        <ul class="footer-links">
-          <li><a href="index.html">Room Dashboard</a></li>
-          <li><a href="javascript:void(0)" onclick="window.print()">Export Printable PDF Report</a></li>
-          <li><a href="developer.html">Developer & Architecture</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4 href="developer.html" class="footer-cta-link">Development Team</h4>
-        <p><strong>Mallarapu Yaswanth</strong></p>
-        <p><strong>Puppireddy Vishwateja</strong></p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="container footer-bottom-inner">
-        <span>&copy; 2026 Bachelors Finance Manager. All rights reserved.</span>
-        </div>
-    </div>
-  </footer>
+    <section class="card tools-card" aria-labelledby="toolsTitle"><div class="section-heading compact-heading"><div><span class="section-kicker">09</span><h2 id="toolsTitle">Backup & workspace tools</h2></div><span class="muted">Recommended before changing devices</span></div><div class="tool-grid"><button class="btn btn-secondary" type="button" data-action="export-json">Download JSON backup</button><button class="btn btn-secondary" type="button" data-action="export-csv">Download CSV</button><button class="btn btn-secondary" type="button" data-action="import-json">Import JSON backup</button><button class="btn btn-ghost" type="button" data-action="clear-workspace">Clear workspace data</button></div><input id="importFileInput" class="sr-only" type="file" accept="application/json,.json"><p class="privacy-note"><strong>Local-first note:</strong> this app does not sync workspace data to a server. Browser storage can be cleared by the browser or device, so keep an exported backup for important records.</p></section>
+  </section>
+</main>
 
-  <script src="app.js"></script>
+<footer class="site-footer"><div class="container footer-grid"><div><a class="brand-link footer-brand" href="./"><span class="brand-mark">₹</span><span class="brand-copy"><strong>Bachelor Finance Manager</strong><span>Open web project</span></span></a><p class="footer-copy">A dependency-light expense sharing project demonstrating client-side data modeling, deterministic settlement logic, accessibility and static deployment.</p></div><div><h2 class="footer-title">Project</h2><a href="developer.html">Engineering notes</a><a href="privacy.html">Privacy & data model</a><a href="https://github.com/MYG-1107/Bachelor-Finance-Manager" rel="noopener noreferrer">GitHub repository</a></div><div><h2 class="footer-title">Built by</h2><p class="footer-copy"><strong>Mallarapu Yaswanth</strong></p><p class="footer-copy"><strong>Puppireddy Vishwateja</strong></p></div></div><div class="footer-bottom"><div class="container footer-bottom-inner"><span>© 2026 Bachelor Finance Manager</span><span>Designed for shared living · Built for the browser</span></div></div></footer>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 </body>
 </html>

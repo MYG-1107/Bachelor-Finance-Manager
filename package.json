@@ -1,0 +1,15 @@
+{
+  "name": "bachelor-finance-manager",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Local-first shared expense manager for roommates and shared flats.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/settlement.test.mjs",
+    "check:js": "node --check app.js && node --check settlement.js",
+    "check": "npm run check:js && npm test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

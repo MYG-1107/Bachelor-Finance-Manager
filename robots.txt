@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://myg-1107.github.io/Bachelor-Finance-Manager/sitemap.xml
