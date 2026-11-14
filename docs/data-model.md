@@ -99,6 +99,8 @@ For the legacy shape:
 - DD/MM/YYYY dates are converted to YYYY-MM-DD;
 - the normalized state is saved under the current V5 key.
 
+For imported workspace-shaped JSON, the app reads the workspace object (or the parsed object itself), normalizes it and creates a new workspace ID. The type marker and schemaVersion metadata are not treated as a cryptographic signature or strict schema-version gate. Missing participant arrays fall back to the workspace member list. Missing dates default to today, while a non-empty imported date is currently passed through without the strict calendar-date validation applied to newly submitted expenses. Treat hand-edited JSON as untrusted input; strict imported-date validation is a known hardening opportunity.
+
 Imported workspaces are normalized in the browser. The import path accepts the exported wrapper containing a workspace or a workspace-shaped object. It generates a fresh workspace ID and avoids overwriting an existing workspace; duplicate names are given an Imported suffix. The JSON importer is a convenience normalizer, not a signed backup verifier or a hostile-file sandbox.
 
 ## 8. Backup semantics
