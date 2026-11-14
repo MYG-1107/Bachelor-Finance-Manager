@@ -41,7 +41,7 @@
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand-link" href="./" aria-label="Bachelor Finance Manager home">
-      <span class="brand-mark" aria-hidden="true">₹</span>
+      <img class="brand-logo" src="logo.svg" alt="" width="48" height="48">
       <span class="brand-copy"><strong>Bachelor Finance Manager</strong><span>Shared expense settlement</span></span>
     </a>
     <nav class="header-nav" aria-label="Primary navigation">
@@ -49,8 +49,12 @@
         <span class="session-info"><span class="session-label">Workspace</span><strong id="sessionRoomName">—</strong></span>
         <button class="btn btn-outline btn-small" type="button" data-action="switch-workspace">Switch</button>
       </div>
-      <a class="nav-link" href="developer.html">Engineering</a>
-      <a class="nav-link" href="privacy.html">Privacy</a>
+      <a class="nav-link" href="./">Home</a>
+      <a class="nav-link" href="#ledgerTitle">Expenses</a>
+      <a class="nav-link" href="#settlementTitle">Settlements</a>
+      <a class="nav-link" href="#categoryChart">Reports</a>
+      <a class="nav-link nav-link-secondary" href="developer.html">Engineering</a>
+      <a class="nav-link nav-link-secondary" href="privacy.html">Privacy</a>
     </nav>
   </div>
 </header>
@@ -87,7 +91,18 @@
   </section>
 
   <section id="dashboardView" class="hidden" aria-labelledby="dashboardTitle">
-    <div class="dashboard-hero"><div><div class="eyebrow">ACTIVE WORKSPACE</div><h1 id="dashboardTitle">Workspace</h1><p id="dashboardSubtitle" class="hero-lead compact">—</p><p id="activeUserGreeting" class="muted"></p></div><div class="dashboard-actions"><button class="btn btn-secondary" type="button" data-action="print">Print / Save PDF</button><button class="btn btn-primary" type="button" data-action="export-csv">Export CSV</button></div></div>
+    <aside class="dashboard-sidebar" aria-label="Workspace navigation">
+      <span class="sidebar-label">WORKSPACE</span>
+      <a class="sidebar-link is-active" href="#dashboardTitle"><span class="sidebar-icon" aria-hidden="true">⌂</span>Overview</a>
+      <a class="sidebar-link" href="#addExpenseForm"><span class="sidebar-icon" aria-hidden="true">＋</span>Add expense</a>
+      <a class="sidebar-link" href="#addMemberForm"><span class="sidebar-icon" aria-hidden="true">♧</span>Roommates</a>
+      <a class="sidebar-link" href="#ledgerTitle"><span class="sidebar-icon" aria-hidden="true">▤</span>Expense ledger</a>
+      <a class="sidebar-link" href="#balancesTitle"><span class="sidebar-icon" aria-hidden="true">⇄</span>Balances</a>
+      <a class="sidebar-link" href="#settlementTitle"><span class="sidebar-icon" aria-hidden="true">⚖</span>Settlements</a>
+      <a class="sidebar-link" href="#categoryChart"><span class="sidebar-icon" aria-hidden="true">▥</span>Reports</a>
+      <div class="sidebar-tip"><span class="sidebar-tip-icon">✓</span><strong>Keep it balanced.</strong><p>Record bills as they happen and settle with confidence.</p></div>
+    </aside>
+    <div class="dashboard-hero"><div><div class="eyebrow">ACTIVE WORKSPACE</div><h1 id="dashboardTitle">Workspace</h1><p id="dashboardSubtitle" class="hero-lead compact">—</p><p id="activeUserGreeting" class="muted"></p></div><div class="dashboard-actions"><a class="btn btn-primary" href="#addExpenseForm">＋ Add expense</a><button class="btn btn-light" type="button" data-action="print">Print report</button><button class="btn btn-light" type="button" data-action="export-csv">Export CSV</button></div><div class="hero-art" aria-hidden="true"><div class="hero-art-house">⌂</div><div class="hero-art-sheet"><span>✓</span><span>✓</span><span>✓</span></div><div class="hero-art-coins">₹</div></div></div>
 
     <section class="kpi-grid" aria-label="Workspace summary">
       <article class="kpi-card"><span class="kpi-label">Selected spend</span><strong id="kpiTotalExpenditure" class="kpi-value">₹0.00</strong><span id="periodSummary" class="kpi-subtext">All recorded expenses</span></article>
@@ -124,7 +139,7 @@
   </section>
 </main>
 
-<footer class="site-footer"><div class="container footer-grid"><div><a class="brand-link footer-brand" href="./"><span class="brand-mark">₹</span><span class="brand-copy"><strong>Bachelor Finance Manager</strong><span>Open web project</span></span></a><p class="footer-copy">A dependency-light expense sharing project demonstrating client-side data modeling, deterministic settlement logic, accessibility and static deployment.</p></div><div><h2 class="footer-title">Project</h2><a href="developer.html">Engineering notes</a><a href="privacy.html">Privacy & data model</a><a href="https://github.com/MYG-1107/Bachelor-Finance-Manager" rel="noopener noreferrer">GitHub repository</a></div><div><h2 class="footer-title">Built by</h2><p class="footer-copy"><strong>Mallarapu Yaswanth</strong></p><p class="footer-copy"><strong>Puppireddy Vishwateja</strong></p></div></div><div class="footer-bottom"><div class="container footer-bottom-inner"><span>© 2026 Bachelor Finance Manager</span><span>Designed for shared living · </span></div></div></footer>
+<footer class="site-footer"><div class="container footer-grid"><div><a class="brand-link footer-brand" href="./"><img class="brand-logo" src="logo.svg" alt="" width="48" height="48"><span class="brand-copy"><strong>Bachelor Finance Manager</strong><span>Open web project</span></span></a><p class="footer-copy">A dependency-light expense sharing project demonstrating client-side data modeling, deterministic settlement logic, accessibility and static deployment.</p></div><div><h2 class="footer-title">Project</h2><a href="developer.html">Engineering notes</a><a href="privacy.html">Privacy & data model</a><a href="https://github.com/MYG-1107/Bachelor-Finance-Manager" rel="noopener noreferrer">GitHub repository</a></div><div><h2 class="footer-title">Built by</h2><p class="footer-copy"><strong>Mallarapu Yaswanth</strong></p><p class="footer-copy"><strong>Puppireddy Vishwateja</strong></p></div></div><div class="footer-bottom"><div class="container footer-bottom-inner"><span>© 2026 Bachelor Finance Manager</span><span>Designed for shared living · </span></div></div></footer>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 </body>
 </html>
