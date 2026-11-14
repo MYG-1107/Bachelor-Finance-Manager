@@ -1,8 +1,27 @@
 flowchart TB
-  User[Roommates / household members] --> UI[Browser interface]
-  UI --> App[Application orchestration]
-  App --> Domain[Settlement domain service]
-  App --> CSV[CSV export adapter]
-  App --> Store[(Browser localStorage)]
-  Domain --> Result[Balances and transfer plan]
-  Result --> UI
+  Visitor[Household user] --> GitHubPages[GitHub Pages static hosting]
+  GitHubPages --> Browser[User browser]
+  subgraph Runtime[Browser runtime - no application server]
+    UI[index.html + styles.css]
+    App[app.js application orchestration]
+    Domain[src/domain/settlement.js]
+    CSV[src/infrastructure/csv.js]
+    Storage[(localStorage V5)]
+    APIs[Browser APIs: FileReader, Blob, URL, print, confirm]
+    UI --> App
+    App --> Domain
+    Domain --> App
+    App --> CSV
+    App <--> Storage
+    App --> APIs
+    App --> UI
+  end
+  Browser --> Runtime
+  subgraph Quality[Development-time quality pipeline - not visitor runtime]
+    Actions[GitHub Actions]
+    Node[Node.js 20]
+    Tests[Node test runner]
+    Actions --> Node --> Tests
+  end
+  Domain -. tested by .-> Tests
+  CSV -. tested by .-> Tests

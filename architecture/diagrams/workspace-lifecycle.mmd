@@ -1,0 +1,19 @@
+sequenceDiagram
+  participant U as User
+  participant P as index.html / UI
+  participant A as app.js
+  participant D as settlement domain
+  participant S as localStorage
+  U->>P: Submit expense form
+  P->>A: DOM submit event
+  A->>A: Normalize and validate payer, date, amount, participants
+  A->>S: Save workspace with new expense
+  A->>A: Apply search / month / category filters
+  A->>D: computeSettlement(filteredExpenses, members)
+  D-->>A: totals, balances, net positions, transfers
+  A->>P: Render ledger, charts and settlement
+  U->>P: Change a filter
+  P->>A: Input / change event
+  A->>D: Recompute filtered expense set
+  D-->>A: Updated settlement
+  A->>P: Refresh dashboard
