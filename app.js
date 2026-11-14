@@ -1,4 +1,5 @@
-import { computeSettlement } from './settlement.js';
+import { computeSettlement } from './src/domain/settlement.js';
+import { serializeCsv } from './src/infrastructure/csv.js';
 
 const STORAGE_KEY = 'BFM_DATA_SESSION_V5';
 const LEGACY_STORAGE_KEY = 'BFM_DATA_SESSION_V3';
@@ -52,6 +53,12 @@ function todayValue() {
   return localDateValue();
 }
 
+function isValidDate(value) {
+  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T12:00:00`);
+  return !Number.isNaN(parsed.getTime()) && localDateValue(parsed) === value;
+}
+
 function dateOffset(days) {
   const date = new Date();
   date.setDate(date.getDate() + days);
@@ -84,7 +91,8 @@ function money(minor) {
 function parseMoney(value) {
   const number = Number(String(value ?? '').replaceAll(',', '').trim());
   if (!Number.isFinite(number) || number <= 0) return null;
-  return Math.round(number * 100);
+  const amountMinor = Math.round(number * 100);
+  return Number.isSafeInteger(amountMinor) && amountMinor > 0 ? amountMinor : null;
 }
 
 function safeFileName(value) {
@@ -300,11 +308,11 @@ function addExpense(form) {
   const amountMinor = parseMoney(formData.get('amount'));
   const participants = $$('input[name="participants"]:checked').map(input => normalize(input.value));
 
-  if (!payer || !description || !date || !amountMinor) {
+  if (!payer || !workspace.members.includes(payer) || !description || !isValidDate(date) || !amountMinor) {
     toast('Enter a payer, description, date and valid amount.', 'error');
     return;
   }
-  if (!participants.length) {
+  if (!participants.length || participants.some(member => !workspace.members.includes(member))) {
     toast('Select at least one roommate to share this expense.', 'error');
     return;
   }
@@ -548,11 +556,6 @@ function download(content, type, name) {
   URL.revokeObjectURL(url);
 }
 
-function csvCell(value) {
-  const text = String(value ?? '');
-  return /[",\n\r]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
-}
-
 function exportCsv() {
   const workspace = activeWorkspace();
   if (!workspace) return;
@@ -560,7 +563,7 @@ function exportCsv() {
   for (const expense of filteredExpenses()) {
     rows.push([expense.date, expense.payer, expense.category, expense.description, (expense.amountMinor / 100).toFixed(2), expense.participants.join('; ')]);
   }
-  download(rows.map(row => row.map(csvCell).join(',')).join('\r\n'), 'text/csv;charset=utf-8', `${safeFileName(workspace.name)}-expenses.csv`);
+  download(serializeCsv(rows), 'text/csv;charset=utf-8', `${safeFileName(workspace.name)}-expenses.csv`);
   toast('CSV exported.');
 }
 
