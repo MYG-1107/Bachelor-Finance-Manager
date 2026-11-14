@@ -67,6 +67,8 @@ npm install
 npm run check
 ```
 
+The checks run every Node test file under the test directory, including domain invariants and CSV export safety.
+
 The project has no runtime npm dependencies.
 
 ## Repository map
@@ -75,7 +77,13 @@ The project has no runtime npm dependencies.
 .
 ├── index.html
 ├── app.js
-├── settlement.js
+├── settlement.js                 # Backward-compatible domain entry point
+├── src/
+│   ├── domain/settlement.js       # Pure integer-paise settlement engine
+│   └── infrastructure/csv.js      # Safe CSV serialization
+├── architecture/
+│   ├── README.md
+│   └── diagrams/
 ├── styles.css
 ├── developer.html
 ├── privacy.html
@@ -90,7 +98,8 @@ The project has no runtime npm dependencies.
 │   ├── data-model.md
 │   └── settlement-algorithm.md
 ├── tests/
-│   └── settlement.test.mjs
+│   ├── settlement.test.mjs
+│   └── csv.test.mjs
 └── .github/
     └── workflows/
         └── quality.yml
