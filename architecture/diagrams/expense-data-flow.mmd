@@ -1,10 +1,21 @@
-flowchart LR
-  Form[Expense form] --> Validate[Normalize and validate]
-  Validate --> Save[(Versioned workspace storage)]
-  Save --> Read[Read selected workspace and filters]
-  Read --> Engine[Integer-paise settlement engine]
-  Engine --> Balance[Paid / owed / net balances]
-  Engine --> Transfer[Minimal transfer list]
-  Balance --> Dashboard[Dashboard and reports]
-  Transfer --> Dashboard
-  Dashboard --> Export[CSV / JSON / print]
+flowchart TB
+  Start[Browser starts] --> Load[Read localStorage V5]
+  Load --> Found{Current state found?}
+  Found -- Yes --> Normalize[Normalize current workspaces]
+  Found -- No --> Legacy[Try legacy V3 / legacy shape]
+  Legacy --> Migrate[Migrate to workspace schema V5]
+  Normalize --> Ready[Render landing or active workspace]
+  Migrate --> Save[Save normalized V5 state]
+  Save --> Ready
+  Ready --> Form[User records expense]
+  Form --> Validate[Normalize and validate fields]
+  Validate --> Persist[Append expense and save localStorage]
+  Persist --> Filter[Apply search, month and category filters]
+  Filter --> Engine[computeSettlement]
+  Engine --> Result[Paid, owed, net and transfers]
+  Result --> Render[Ledger, KPIs, charts, balances and settlement]
+  Filter --> CSV[CSV exports filtered rows]
+  Ready --> JSON[JSON backup exports full active workspace]
+  JSON --> Import[Browser FileReader import]
+  Import --> NormalizeImport[Normalize as a new workspace with a new ID]
+  NormalizeImport --> Persist
