@@ -1,0 +1,10 @@
+flowchart LR
+  Form[Expense form] --> Validate[Normalize and validate]
+  Validate --> Save[(Versioned workspace storage)]
+  Save --> Read[Read selected workspace and filters]
+  Read --> Engine[Integer-paise settlement engine]
+  Engine --> Balance[Paid / owed / net balances]
+  Engine --> Transfer[Minimal transfer list]
+  Balance --> Dashboard[Dashboard and reports]
+  Transfer --> Dashboard
+  Dashboard --> Export[CSV / JSON / print]
