@@ -95,7 +95,7 @@ All workspaces for this site/browser profile are serialized together in the root
 - Current state is loaded from BFM_DATA_SESSION_V5.
 - If that key is absent, the application checks BFM_DATA_SESSION_V3.
 - Legacy single-workspace records are mapped into the current workspace structure. Legacy DD/MM/YYYY dates are converted to YYYY-MM-DD; historical expenses are assigned the legacy member list as participants because the old shape did not retain per-expense participant sets.
-- Workspace normalization trims names, removes duplicate member names, ensures the owner is present, normalizes valid expense fields and adds referenced payers/participants to the workspace member list.
+- Workspace normalization trims names, removes duplicate member names, ensures the owner is present, normalizes expense text/amount fields and adds referenced payers/participants to the workspace member list. If an imported expense has no participants, the normalizer falls back to the workspace member list. A non-empty imported date is currently passed through without the strict calendar-date check used by the new-expense form; a hand-edited backup can therefore contain a malformed date.
 - Unreadable JSON or a storage exception is caught and shown as an application message; the current page falls back to an empty in-memory state. Users should retain an exported backup.
 
 The version field is schema metadata, not a server-side migration service. There is no automatic recovery from browser-profile loss or device changes.
