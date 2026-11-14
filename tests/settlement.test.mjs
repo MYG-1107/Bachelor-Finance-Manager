@@ -69,11 +69,32 @@ test('multiple expenses net together correctly', () => {
   assert.equal(totalTransferred(result), Math.max(...Object.values(result.net)));
 });
 
-
 test('rejects a valid-amount expense with no valid participants', () => {
   assert.throws(() => computeSettlement([
     { payer: 'A', amountMinor: 100, participants: [] }
   ], members), RangeError);
+});
+
+test('rejects non-integer, zero and unsafe expense amounts rather than skipping them', () => {
+  for (const amountMinor of [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1, '100']) {
+    assert.throws(() => computeSettlement([
+      { payer: 'A', amountMinor, participants: members }
+    ], members), RangeError);
+  }
+});
+
+test('rejects payers and participants outside the workspace', () => {
+  assert.throws(() => computeSettlement([
+    { payer: 'Z', amountMinor: 100, participants: ['A'] }
+  ], members), RangeError);
+  assert.throws(() => computeSettlement([
+    { payer: 'A', amountMinor: 100, participants: ['A', 'Z'] }
+  ], members), RangeError);
+});
+
+test('rejects missing member and expense arrays', () => {
+  assert.throws(() => computeSettlement(null, members), TypeError);
+  assert.throws(() => computeSettlement([], null), TypeError);
 });
 
 test('settlement validator detects altered or malformed transfers', () => {
