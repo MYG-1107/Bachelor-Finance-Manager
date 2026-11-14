@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { computeSettlement, validateSettlement } from '../settlement.js';
+import { computeSettlement, validateSettlement } from '../src/domain/settlement.js';
 
 const members = ['A', 'B', 'C', 'D'];
 
@@ -67,4 +67,26 @@ test('multiple expenses net together correctly', () => {
   assert.equal(result.averageShareMinor, 57525);
   assert.equal(validateSettlement(result), true);
   assert.equal(totalTransferred(result), Math.max(...Object.values(result.net)));
+});
+
+
+test('rejects a valid-amount expense with no valid participants', () => {
+  assert.throws(() => computeSettlement([
+    { payer: 'A', amountMinor: 100, participants: [] }
+  ], members), RangeError);
+});
+
+test('settlement validator detects altered or malformed transfers', () => {
+  const result = computeSettlement([
+    { payer: 'A', amountMinor: 400, participants: members }
+  ], members);
+  assert.equal(validateSettlement(result), true);
+  assert.equal(validateSettlement({
+    ...result,
+    transfers: [{ from: 'B', to: 'A', amountMinor: 1 }]
+  }), false);
+  assert.equal(validateSettlement({
+    ...result,
+    transfers: [{ from: 'A', to: 'A', amountMinor: 1 }]
+  }), false);
 });
