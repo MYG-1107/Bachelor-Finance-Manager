@@ -1,16 +1,217 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Bachelor Finance Manager engineering documentation, architecture, data model, testing and deployment notes."><link rel="canonical" href="https://myg-1107.github.io/Bachelor-Finance-Manager/developer.html"><title>Engineering | Bachelor Finance Manager</title><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css"></head>
-<body><div class="top-accent"></div><header class="site-header"><div class="container header-inner"><a class="brand-link" href="./"><img class="brand-logo" src="logo.svg" alt="" width="48" height="48"><span class="brand-copy"><strong>Bachelor Finance Manager</strong><span>Engineering documentation</span></span></a><a class="btn btn-secondary btn-small" href="./">← Back to app</a></div></header>
-<main class="container page-shell"><section class="card"><div class="eyebrow">ENGINEERING</div><h1>Built as a small but serious software system.</h1><p class="hero-lead">The project stays dependency-light and separates presentation, application orchestration, pure financial rules and export infrastructure. Architecture diagrams and design boundaries are maintained in the repository architecture folder.</p></section>
-<section class="insight-grid"><article class="card"><span class="section-kicker">Architecture</span><h2>Client-side application</h2><p>Semantic HTML and CSS provide the interface. <code>app.js</code> coordinates workspace state and UI events. <code>src/domain/settlement.js</code> owns pure finance rules, while <code>src/infrastructure/csv.js</code> safely serializes exports.</p><pre><code>Browser UI
-   ↓
-app.js — application orchestration
-   ├── src/domain/settlement.js — finance rules
-   ├── src/infrastructure/csv.js — safe exports
-   └── localStorage — workspace persistence</code></pre></article><article class="card"><span class="section-kicker">Runtime</span><h2>Why vanilla JavaScript?</h2><p>The problem does not require a framework. Keeping the application native makes the state model visible, reduces bundle size and lets the repository demonstrate fundamentals rather than dependency management.</p></article></section>
-<section class="card"><div class="section-heading"><div><span class="section-kicker">Stack</span><h2>Technologies</h2></div></div><div class="kpi-grid"><div class="kpi-card"><span class="kpi-label">Frontend</span><strong class="kpi-value">HTML · CSS · JS</strong></div><div class="kpi-card"><span class="kpi-label">Persistence</span><strong class="kpi-value">localStorage</strong></div><div class="kpi-card"><span class="kpi-label">Hosting</span><strong class="kpi-value">GitHub Pages</strong></div><div class="kpi-card"><span class="kpi-label">Quality</span><strong class="kpi-value">Node test + CI</strong></div></div></section>
-<section class="card"><div class="section-heading"><div><span class="section-kicker">Design decisions</span><h2>What makes it production-minded</h2></div></div><div class="step-grid"><article class="step-card"><h3>Money as paise</h3><p>Amounts are stored as integer minor units to avoid common floating-point money errors.</p></article><article class="step-card"><h3>Workspace isolation</h3><p>Members and expenses live inside named workspaces instead of one global session object.</p></article><article class="step-card"><h3>Explicit participant sets</h3><p>Each expense records who shared it, so a WiFi bill and a dinner can involve different people.</p></article></div></section>
-<section class="card"><div class="section-heading"><div><span class="section-kicker">Testing</span><h2>Settlement scenarios</h2></div></div><p>The test suite covers equal splits, participant-specific expenses, paise remainders, invalid participants, transfer invariants, CSV quoting and spreadsheet-formula injection.</p><pre><code>npm test</code></pre><p>For the browser app, open the static site through a local web server so ES modules resolve correctly.</p></section>
-<section class="card"><div class="section-heading"><div><span class="section-kicker">Deployment</span><h2>GitHub Pages + CI</h2></div></div><p>The GitHub Actions workflow runs JavaScript syntax checks and all automated domain/export tests on pushes and pull requests. GitHub Pages can then serve the static site from the repository.</p><p><a class="btn btn-primary btn-small" href="https://github.com/MYG-1107/Bachelor-Finance-Manager">View repository</a></p></section></main>
-<footer class="site-footer"><div class="container footer-bottom-inner"><span>© 2026 Bachelor Finance Manager</span><span>Mallarapu Yaswanth · Puppireddy Vishwateja</span></div></footer></body></html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="End-to-end engineering and architecture documentation for Bachelor Finance Manager, including runtime boundaries, workflows, data model, settlement logic, privacy and testing.">
+  <link rel="canonical" href="https://myg-1107.github.io/Bachelor-Finance-Manager/developer.html">
+  <title>Engineering & Architecture | Bachelor Finance Manager</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .architecture-figure{overflow-x:auto;margin:1.25rem 0 0;padding:1rem;border:1px solid #dbe5ee;border-radius:1rem;background:#f8fbfd}
+    .architecture-figure svg{display:block;width:100%;min-width:680px;height:auto}
+    .doc-links{display:flex;flex-wrap:wrap;gap:.75rem}
+    .doc-links a{display:inline-flex;align-items:center;padding:.65rem .9rem;border:1px solid #d6e1eb;border-radius:.65rem;font-weight:650;text-decoration:none}
+    .doc-note{padding:1rem;border-left:4px solid #2b6cb0;background:#f3f8fc;border-radius:.5rem}
+    .mono-label{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.9em}
+    .section-lead{max-width:70ch}
+    .detail-list{padding-left:1.25rem}
+    .detail-list li{margin:.45rem 0}
+    .architecture-figure figcaption{margin-top:.75rem;color:#526579;font-size:.9rem}
+    .data-table td,.data-table th{vertical-align:top}
+    @media(max-width:720px){.architecture-figure{margin-inline:-.25rem}.architecture-figure svg{min-width:680px}}
+  </style>
+</head>
+<body>
+<div class="top-accent"></div>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand-link" href="./">
+      <img class="brand-logo" src="logo.svg" alt="" width="48" height="48">
+      <span class="brand-copy"><strong>Bachelor Finance Manager</strong><span>Engineering & architecture</span></span>
+    </a>
+    <a class="btn btn-secondary btn-small" href="./">← Back to app</a>
+  </div>
+</header>
+
+<main class="container page-shell">
+  <section class="card">
+    <div class="eyebrow">ENGINEERING DOCUMENTATION · CURRENT IMPLEMENTATION</div>
+    <h1>Understand the system from browser screen to settlement result.</h1>
+    <p class="hero-lead section-lead">This page describes the code that exists today. It explains the application layers, browser data lifecycle, finance calculation, export behavior, quality checks and the limits of the current release.</p>
+    <p class="doc-note"><strong>Architecture boundary:</strong> Bachelor Finance Manager is a static, browser-only application. GitHub Pages serves the files; workspace data and financial calculations run in the user's browser. There is no backend, account system, server database or cloud synchronization.</p>
+  </section>
+
+  <section class="card">
+    <div class="section-heading"><div><span class="section-kicker">01 · SYSTEM CONTEXT</span><h2>How the parts fit together</h2></div></div>
+    <p class="section-lead">The browser is the runtime boundary. The development-time test pipeline is separate and does not run when a visitor uses the app.</p>
+    <figure class="architecture-figure">
+      <svg viewBox="0 0 1000 660" role="img" aria-labelledby="archSvgTitle archSvgDesc" xmlns="http://www.w3.org/2000/svg">
+        <title id="archSvgTitle">Bachelor Finance Manager system architecture</title>
+        <desc id="archSvgDesc">GitHub Pages delivers static files to the browser. In the browser, the HTML and CSS interface calls app.js, which coordinates the settlement domain, CSV serializer, localStorage and browser file and print APIs. GitHub Actions and Node tests form a separate quality pipeline.</desc>
+        <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L8 3 L0 6 Z" fill="#54748e"/></marker></defs>
+        <rect x="330" y="18" width="340" height="62" rx="13" fill="#e8f1fa" stroke="#9db6cc" stroke-width="2"/>
+        <text x="500" y="43" text-anchor="middle" font-size="19" font-weight="700" fill="#16324a">GitHub Pages</text>
+        <text x="500" y="64" text-anchor="middle" font-size="13" fill="#456078">Static file delivery only</text>
+        <path d="M500 80 V112" stroke="#54748e" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <rect x="28" y="120" width="944" height="390" rx="18" fill="#fbfdff" stroke="#9db6cc" stroke-width="2" stroke-dasharray="8 6"/>
+        <text x="52" y="151" font-size="17" font-weight="700" fill="#27465f">BROWSER RUNTIME · UI, data and calculations stay on the user's device</text>
+        <rect x="58" y="185" width="230" height="105" rx="12" fill="#edf5fb" stroke="#7fa6c4" stroke-width="2"/>
+        <text x="173" y="216" text-anchor="middle" font-size="18" font-weight="700" fill="#16324a">Presentation</text>
+        <text x="173" y="242" text-anchor="middle" font-size="14" fill="#35566f">index.html</text>
+        <text x="173" y="263" text-anchor="middle" font-size="14" fill="#35566f">styles.css</text>
+        <rect x="385" y="185" width="230" height="105" rx="12" fill="#eaf6f0" stroke="#80b79b" stroke-width="2"/>
+        <text x="500" y="216" text-anchor="middle" font-size="18" font-weight="700" fill="#174b34">Application</text>
+        <text x="500" y="242" text-anchor="middle" font-size="14" fill="#285d45">app.js</text>
+        <text x="500" y="263" text-anchor="middle" font-size="13" fill="#285d45">state · events · validation</text>
+        <rect x="712" y="185" width="230" height="105" rx="12" fill="#fff6e8" stroke="#d8b276" stroke-width="2"/>
+        <text x="827" y="216" text-anchor="middle" font-size="18" font-weight="700" fill="#694719">Browser platform</text>
+        <text x="827" y="242" text-anchor="middle" font-size="14" fill="#77572e">FileReader · Blob · URL</text>
+        <text x="827" y="263" text-anchor="middle" font-size="14" fill="#77572e">print · confirm</text>
+        <path d="M288 237 H380" stroke="#54748e" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <path d="M615 237 H707" stroke="#54748e" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <rect x="72" y="365" width="250" height="105" rx="12" fill="#f0edfb" stroke="#a79bd0" stroke-width="2"/>
+        <text x="197" y="397" text-anchor="middle" font-size="18" font-weight="700" fill="#3d326b">Finance domain</text>
+        <text x="197" y="423" text-anchor="middle" font-size="14" fill="#51477b">src/domain/settlement.js</text>
+        <text x="197" y="445" text-anchor="middle" font-size="13" fill="#51477b">pure paise calculations</text>
+        <rect x="375" y="365" width="250" height="105" rx="12" fill="#edf5fb" stroke="#7fa6c4" stroke-width="2"/>
+        <text x="500" y="397" text-anchor="middle" font-size="18" font-weight="700" fill="#16324a">CSV serializer</text>
+        <text x="500" y="423" text-anchor="middle" font-size="14" fill="#35566f">src/infrastructure/csv.js</text>
+        <text x="500" y="445" text-anchor="middle" font-size="13" fill="#35566f">escaping · formula defense</text>
+        <rect x="678" y="365" width="250" height="105" rx="12" fill="#fff6e8" stroke="#d8b276" stroke-width="2"/>
+        <text x="803" y="397" text-anchor="middle" font-size="18" font-weight="700" fill="#694719">Local persistence</text>
+        <text x="803" y="423" text-anchor="middle" font-size="14" fill="#77572e">localStorage · BFM V5</text>
+        <text x="803" y="445" text-anchor="middle" font-size="13" fill="#77572e">all saved workspaces</text>
+        <path d="M460 290 C420 320 300 325 220 360" fill="none" stroke="#54748e" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <path d="M500 290 V359" stroke="#54748e" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <path d="M540 290 C600 320 720 325 790 360" fill="none" stroke="#54748e" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <path d="M322 416 C350 416 355 416 370 416" stroke="#54748e" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+        <text x="500" y="495" text-anchor="middle" font-size="13" fill="#526579">app.js also owns JSON backup/import, browser downloads and print orchestration</text>
+        <rect x="160" y="545" width="680" height="88" rx="13" fill="#f3f5f7" stroke="#aebbc6" stroke-width="2"/>
+        <text x="500" y="571" text-anchor="middle" font-size="17" font-weight="700" fill="#263b4b">Separate development-time quality pipeline</text>
+        <text x="500" y="597" text-anchor="middle" font-size="14" fill="#526579">GitHub Actions → Node.js 20 → syntax checks + Node tests</text>
+        <text x="500" y="618" text-anchor="middle" font-size="12" fill="#526579">Tests cover settlement and CSV modules; this is not a browser runtime service.</text>
+      </svg>
+      <figcaption>Source-verified module boundaries. The dashed browser boundary is intentional: no server-side application or database is part of the current deployment.</figcaption>
+    </figure>
+  </section>
+
+  <section class="card">
+    <div class="section-heading"><div><span class="section-kicker">02 · MODULE RESPONSIBILITIES</span><h2>What each layer owns</h2></div></div>
+    <div class="table-responsive"><table class="data-table">
+      <thead><tr><th>Layer</th><th>Files / APIs</th><th>Responsibilities</th><th>Must not own</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Presentation</strong></td><td>index.html, styles.css</td><td>Landing screen, dashboard controls, forms, tables, reports, responsive and print styles</td><td>Financial calculations or data persistence rules</td></tr>
+        <tr><td><strong>Application</strong></td><td>app.js</td><td>App state, event delegation, validation, workspaces, migration, localStorage, filtering, rendering, import/export and print</td><td>Duplicating the settlement algorithm</td></tr>
+        <tr><td><strong>Domain</strong></td><td>src/domain/settlement.js</td><td>Paise arithmetic, allocation, paid/owed/net balances, transfer generation and result validation</td><td>DOM, browser storage, files or network access</td></tr>
+        <tr><td><strong>Export serialization</strong></td><td>src/infrastructure/csv.js</td><td>CSV quoting and spreadsheet-formula prefix neutralization</td><td>Downloading files or managing UI events</td></tr>
+        <tr><td><strong>Browser platform</strong></td><td>localStorage, FileReader, Blob, URL, print, confirm</td><td>Persistence, file reading/download, print dialog and confirmations</td><td>Server-side durability or identity</td></tr>
+      </tbody>
+    </table></div>
+    <p class="doc-note"><strong>Important implementation detail:</strong> storage is not yet extracted into its own adapter. The application layer calls localStorage directly. Likewise, app.js creates the CSV download; the CSV module only serializes rows.</p>
+  </section>
+
+  <section class="card">
+    <div class="section-heading"><div><span class="section-kicker">03 · USER WORKFLOWS</span><h2>How data moves through the application</h2></div></div>
+    <div class="step-grid">
+      <article class="step-card"><span class="step-number">01</span><h3>Load the browser workspace</h3><p>app.js reads the V5 localStorage key, normalizes the saved state, attempts the V3 legacy migration when needed, then renders the landing screen or active workspace.</p></article>
+      <article class="step-card"><span class="step-number">02</span><h3>Validate and record a bill</h3><p>The form is normalized. Rupees are converted to integer paise, the date and payer are checked, and at least one workspace participant is required before saving.</p></article>
+      <article class="step-card"><span class="step-number">03</span><h3>Filter and calculate</h3><p>Search, month and category filters produce the current expense set. That set feeds the settlement domain and the dashboard summaries.</p></article>
+      <article class="step-card"><span class="step-number">04</span><h3>Review and export</h3><p>The UI renders the ledger, category totals, payer contributions, balances and transfers. CSV exports filtered rows; JSON backs up the complete active workspace.</p></article>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-heading"><div><span class="section-kicker">04 · FINANCIAL DOMAIN</span><h2>How the settlement calculation works</h2></div></div>
+    <p>Money is stored as integer paise. For each expense, the payer is credited with the full amount, while the obligation is divided among the selected participants. The base share is the floor of amount divided by participant count; remaining paise are assigned one each to the first participants in the saved participant order.</p>
+    <div class="insight-grid">
+      <article class="step-card"><h3>Member net position</h3><p><strong>Net = amount paid − share obligation.</strong> A positive result means the member should receive money; a negative result means the member should pay.</p></article>
+      <article class="step-card"><h3>Transfer matching</h3><p>Debtors and creditors are sorted by balance, with member name as a deterministic tie-breaker. The engine repeatedly transfers the smaller outstanding balance.</p></article>
+    </div>
+    <p class="doc-note"><strong>Filter-aware totals:</strong> total spend, paid/owed balances, charts and suggested transfers all use the current filtered expense set. The “Average spend / member” KPI divides filtered spend by all members in the workspace; it is a reference figure only and does not influence settlement.</p>
+    <p><strong>Money invariant:</strong> participant shares must sum to each expense amount, and all member net balances must sum to zero. The app does not execute payments; it only calculates suggested transfers.</p>
+  </section>
+
+  <section class="card">
+    <div class="section-heading"><div><span class="section-kicker">05 · DATA MODEL</span><h2>Workspace and expense records</h2></div></div>
+    <div class="insight-grid">
+      <article class="step-card"><h3>Root state</h3><p>One localStorage item holds schema version 5, activeWorkspaceId and a map of all saved workspaces for the current browser profile.</p></article>
+      <article class="step-card"><h3>Workspace</h3><p>A workspace stores its ID, name, owner label, timestamps, ordered member-name list and expense list. Member names act as identifiers; there are no separate member IDs.</p></article>
+      <article class="step-card"><h3>Expense</h3><p>An expense stores its ID, date, payer name, category, description, integer amountMinor and participant-name array.</p></article>
+      <article class="step-card"><h3>Calculated results</h3><p>Paid, owed, net balances, category totals and transfer suggestions are derived in memory. Suggested payments are not stored as ledger entries.</p></article>
+    </div>
+    <p>The current schema and migration behavior are documented in <a href="https://github.com/MYG-1107/Bachelor-Finance-Manager/blob/main/docs/data-model.md">the data model document</a>.</p>
+  </section>
+
+  <section class="card">
+    <div class="section-heading"><div><span class="section-kicker">06 · PERSISTENCE AND FILES</span><h2>What gets saved, backed up and exported</h2></div></div>
+    <div class="table-responsive"><table class="data-table">
+      <thead><tr><th>Operation</th><th>Scope</th><th>Behavior</th></tr></thead>
+      <tbody>
+        <tr><td>localStorage</td><td>All browser workspaces</td><td>One versioned JSON state object under BFM_DATA_SESSION_V5</td></tr>
+        <tr><td>CSV download</td><td>Active workspace, filtered expenses</td><td>Rows include date, payer, category, description, amount in INR and participants</td></tr>
+        <tr><td>JSON backup</td><td>Complete active workspace only</td><td>Includes workspace details, members and all its expenses plus backup metadata; not every workspace</td></tr>
+        <tr><td>JSON import</td><td>One imported workspace</td><td>Parsed and normalized in the browser, assigned a new ID and added without overwriting the existing workspace</td></tr>
+        <tr><td>Print</td><td>Current visible report</td><td>Opens the browser print dialog and uses print-specific CSS</td></tr>
+      </tbody>
+    </table></div>
+    <p>CSV cells beginning with spreadsheet formula characters are prefixed before quoting. JSON backups may contain names and household spending details, so exported files should be kept private.</p>
+  </section>
+
+  <section class="card">
+    <div class="section-heading"><div><span class="section-kicker">07 · SECURITY AND LIMITS</span><h2>What this architecture does—and does not—guarantee</h2></div></div>
+    <div class="step-grid">
+      <article class="step-card"><h3>Local, not encrypted</h3><p>Workspace records remain in browser localStorage. It is not encrypted secure storage, and anyone using the same unlocked browser profile may be able to access the records.</p></article>
+      <article class="step-card"><h3>No accounts or collaboration</h3><p>The owner name is a label, not a login. The current version has no access roles, remote database, live multi-user editing or cloud backup.</p></article>
+      <article class="step-card"><h3>Backups are important</h3><p>Browser cleanup, profile loss or storage failure can remove data. JSON export is the user's recovery path; there is no server-side restore service.</p></article>
+      <article class="step-card"><h3>Not a payment system</h3><p>Transfers are recommendations calculated from expense records. No bank connection, payment execution, receipt verification or settlement confirmation exists.</p></article>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-heading"><div><span class="section-kicker">08 · QUALITY AND DEPLOYMENT</span><h2>How the code is checked and published</h2></div></div>
+    <p>The project uses native browser JavaScript modules and has no runtime npm dependencies. Node.js 20+ runs the syntax checks and Node built-in tests. The GitHub Actions workflow runs these checks on pushes to main/refactor branches and pull requests targeting main.</p>
+    <p>Current automated tests focus on settlement invariants, participant splits, paise remainders, transfer validation, CSV quoting and spreadsheet-formula neutralization. They are not browser end-to-end tests. Responsive behavior, actual localStorage lifecycle, file picker/download and print output still require browser verification.</p>
+    <p>GitHub Pages serves static files; there is no compile/bundle stage, web server process or database deployment. The site.webmanifest is metadata only: the current repository does not include a service worker or offline cache implementation.</p>
+  </section>
+
+  <section class="card">
+    <div class="section-heading"><div><span class="section-kicker">09 · FEATURE TRACEABILITY</span><h2>Visible feature → implementation</h2></div></div>
+    <div class="table-responsive"><table class="data-table">
+      <thead><tr><th>Visible area</th><th>Implementation path</th></tr></thead>
+      <tbody>
+        <tr><td>Landing, workspace form and saved workspace list</td><td>index.html + app.js workspace functions</td></tr>
+        <tr><td>Roommate list and add/remove</td><td>index.html forms + app.js member lifecycle</td></tr>
+        <tr><td>Expense form and ledger</td><td>index.html + app.js addExpense, filteredExpenses and renderExpenses</td></tr>
+        <tr><td>Search, period and category filters</td><td>app.js filteredExpenses and renderFilters</td></tr>
+        <tr><td>KPIs, charts and balances</td><td>app.js renderDashboard, renderCharts and renderBalances</td></tr>
+        <tr><td>Suggested transfers</td><td>src/domain/settlement.js computeSettlement + app.js renderTransfers</td></tr>
+        <tr><td>CSV download</td><td>src/infrastructure/csv.js + app.js exportCsv</td></tr>
+        <tr><td>JSON backup and restore</td><td>app.js exportJson and importJson</td></tr>
+        <tr><td>Print report</td><td>app.js window.print + styles.css print rules</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <div class="section-heading"><div><span class="section-kicker">10 · SOURCE DOCUMENTS</span><h2>Explore the implementation</h2></div></div>
+    <div class="doc-links">
+      <a href="https://github.com/MYG-1107/Bachelor-Finance-Manager/blob/main/architecture/README.md">Architecture reference</a>
+      <a href="https://github.com/MYG-1107/Bachelor-Finance-Manager/blob/main/docs/data-model.md">Data model</a>
+      <a href="https://github.com/MYG-1107/Bachelor-Finance-Manager/blob/main/docs/settlement-algorithm.md">Settlement algorithm</a>
+      <a href="https://github.com/MYG-1107/Bachelor-Finance-Manager/blob/main/app.js">Application code</a>
+      <a href="https://github.com/MYG-1107/Bachelor-Finance-Manager/blob/main/src/domain/settlement.js">Finance domain</a>
+      <a href="https://github.com/MYG-1107/Bachelor-Finance-Manager/blob/main/tests/">Automated tests</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-bottom-inner">
+    <span>© 2026 Bachelor Finance Manager</span>
+    <span>Mallarapu Yaswanth · Puppireddy Vishwateja</span>
+  </div>
+</footer>
+</body>
+</html>
