@@ -3,42 +3,59 @@
  *
  * Pure deterministic calculations. Amounts are integer paise (INR minor units).
  * This module has no browser, storage, or UI dependencies.
+ *
+ * Input contract: callers provide normalized records where every expense has
+ * a positive safe-integer amountMinor, a known payer and one or more unique
+ * participants from the supplied workspace member list.
  */
 
 const isSafePositiveInteger = value => Number.isSafeInteger(value) && value > 0;
 
 export function computeSettlement(expenses, members) {
-  const safeMembers = Array.isArray(members)
-    ? [...new Set(members.filter(member => typeof member === 'string' && member.trim()))]
-    : [];
+  if (!Array.isArray(expenses)) {
+    throw new TypeError('Expenses must be provided as an array.');
+  }
+  if (!Array.isArray(members)) {
+    throw new TypeError('Workspace members must be provided as an array.');
+  }
+
+  const safeMembers = [...new Set(
+    members.filter(member => typeof member === 'string' && member.trim())
+  )];
   const memberSet = new Set(safeMembers);
   const paid = Object.fromEntries(safeMembers.map(member => [member, 0]));
   const owed = Object.fromEntries(safeMembers.map(member => [member, 0]));
   let totalMinor = 0;
 
-  for (const expense of Array.isArray(expenses) ? expenses : []) {
-    const amountMinor = Number(expense?.amountMinor);
-    if (!isSafePositiveInteger(amountMinor)) continue;
+  for (const expense of expenses) {
+    const amountMinor = expense?.amountMinor;
+    if (!isSafePositiveInteger(amountMinor)) {
+      throw new RangeError('Every expense amount must be a positive safe integer in paise.');
+    }
+
+    if (!memberSet.has(expense.payer)) {
+      throw new RangeError('Every expense payer must belong to the workspace.');
+    }
+
+    if (!Array.isArray(expense.participants) || expense.participants.length === 0) {
+      throw new RangeError('Every expense must have at least one participant.');
+    }
+
+    const rawParticipants = expense.participants;
+    const participants = [...new Set(rawParticipants)];
+
+    if (participants.some(member => !memberSet.has(member))) {
+      throw new RangeError('Every expense participant must belong to the workspace.');
+    }
 
     totalMinor += amountMinor;
     if (!Number.isSafeInteger(totalMinor)) {
       throw new RangeError('Expense total exceeds the safe integer range.');
     }
 
-    if (memberSet.has(expense.payer)) {
-      paid[expense.payer] += amountMinor;
-      if (!Number.isSafeInteger(paid[expense.payer])) {
-        throw new RangeError('A member contribution exceeds the safe integer range.');
-      }
-    }
-
-    const participants = [...new Set(
-      (Array.isArray(expense.participants) ? expense.participants : [])
-        .filter(member => memberSet.has(member))
-    )];
-
-    if (participants.length === 0) {
-      throw new RangeError('Every valid expense must have at least one known participant.');
+    paid[expense.payer] += amountMinor;
+    if (!Number.isSafeInteger(paid[expense.payer])) {
+      throw new RangeError('A member contribution exceeds the safe integer range.');
     }
 
     const baseShare = Math.floor(amountMinor / participants.length);
