@@ -5,8 +5,8 @@
   "description": "Local-first shared expense manager for roommates and shared flats.",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/settlement.test.mjs",
-    "check:js": "node --check app.js && node --check settlement.js",
+    "test": "node --test",
+    "check:js": "node --check app.js && node --check src/domain/settlement.js && node --check src/infrastructure/csv.js && node --check settlement.js",
     "check": "npm run check:js && npm test"
   },
   "engines": {

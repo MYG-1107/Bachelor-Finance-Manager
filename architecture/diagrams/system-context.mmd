@@ -1,0 +1,8 @@
+flowchart TB
+  User[Roommates / household members] --> UI[Browser interface]
+  UI --> App[Application orchestration]
+  App --> Domain[Settlement domain service]
+  App --> CSV[CSV export adapter]
+  App --> Store[(Browser localStorage)]
+  Domain --> Result[Balances and transfer plan]
+  Result --> UI
