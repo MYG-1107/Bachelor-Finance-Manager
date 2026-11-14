@@ -157,6 +157,7 @@
       </tbody>
     </table></div>
     <p>CSV cells beginning with spreadsheet formula characters are prefixed before quoting. JSON backups may contain names and household spending details, so exported files should be kept private.</p>
+    <p class="doc-note"><strong>Import limitation:</strong> JSON import normalizes a workspace-shaped file rather than enforcing a signed or strict versioned schema. Newly submitted expense dates are calendar-validated; a non-empty date in a hand-edited import is currently passed through. Do not rely on the importer as a validator for untrusted financial records.</p>
   </section>
 
   <section class="card">
