@@ -1,1 +1,45 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Privacy and data handling information for Bachelor Finance Manager."><link rel="canonical" href="https://myg-1107.github.io/Bachelor-Finance-Manager/privacy.html"><title>Privacy & Data | Bachelor Finance Manager</title><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css"></head><body><div class="top-accent"></div><header class="site-header"><div class="container header-inner"><a class="brand-link" href="./"><img class="brand-logo" src="logo.svg" alt="" width="48" height="48"><span class="brand-copy"><strong>Bachelor Finance Manager</strong><span>Privacy & data</span></span></a><a class="btn btn-secondary btn-small" href="./">← Back to app</a></div></header><main class="container page-shell"><section class="card"><div class="eyebrow">PRIVACY</div><h1>How your workspace data is handled</h1><p class="hero-lead">This static application is designed as a local-first tool. It does not require an account or a backend database for everyday operation.</p></section><section class="card"><h2>Where data is stored</h2><p>Workspace data is stored in your browser's <code>localStorage</code> on the device where you use the app. The application uses that storage to remember workspaces, roommates and expenses.</p><h2>What this means</h2><div class="step-grid"><article class="step-card"><h3>No account required</h3><p>There is no login or password system in this static version.</p></article><article class="step-card"><h3>No cloud sync</h3><p>Workspace records are not sent to an application server by the app code.</p></article><article class="step-card"><h3>Backups matter</h3><p>Clearing browser storage, removing site data or losing the device can remove local records. Export a JSON backup for important data.</p></article></div><h2>Security note</h2><p>Browser local storage is not encrypted secure storage. Do not treat this project as a bank, accounting system or regulated financial records platform.</p><h2>Third-party assets</h2><p>The production pages do not require a third-party font CDN or runtime JavaScript library. The application can therefore operate without pulling UI code from an external dependency.</p></section></main><footer class="site-footer"><div class="container footer-bottom-inner"><span>© 2026 Bachelor Finance Manager</span><span>Local-first · Static web application</span></div></footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Privacy and data handling information for Bachelor Finance Manager.">
+<link rel="canonical" href="https://myg-1107.github.io/Bachelor-Finance-Manager/privacy.html">
+<title>Privacy & Data | Bachelor Finance Manager</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="top-accent"></div>
+<header class="site-header"><div class="container header-inner">
+<a class="brand-link" href="./"><img class="brand-logo" src="logo.svg" alt="" width="48" height="48"><span class="brand-copy"><strong>Bachelor Finance Manager</strong><span>Privacy & data</span></span></a>
+<a class="btn btn-secondary btn-small" href="./">← Back to app</a>
+</div></header>
+<main class="container page-shell">
+<section class="card">
+<div class="eyebrow">PRIVACY</div>
+<h1>How your workspace data is handled</h1>
+<p class="hero-lead">This is a static, local-first browser application. It does not require an account or an application backend for everyday operation.</p>
+</section>
+<section class="card">
+<h2>Where data is stored</h2>
+<p>Workspace data is stored in the browser's localStorage for this website origin and browser profile. The app uses it to remember workspaces, roommate names and expenses on this device/profile.</p>
+<h2>What the application does</h2>
+<div class="step-grid">
+<article class="step-card"><h3>No account required</h3><p>There is no login, password system or authenticated user identity in this static version.</p></article>
+<article class="step-card"><h3>No application data sync</h3><p>The app code does not send workspace records to an application server. There is no cloud database or multi-device synchronization.</p></article>
+<article class="step-card"><h3>Browser-based files</h3><p>JSON import is read in the browser. CSV and JSON exports are generated as local downloads using browser APIs.</p></article>
+</div>
+<h2>What this does not guarantee</h2>
+<p>Browser localStorage is not encrypted secure storage. Other scripts running with the same site origin and anyone with access to the same unlocked browser profile may be able to access the data. The hosting provider still serves the website files and receives normal browser requests for those files; that is separate from the application sending workspace records to a backend.</p>
+<h2>Backups and data loss</h2>
+<p>Clearing browser storage, deleting site data, losing the browser profile or losing the device can remove local records. JSON backup exports the complete active workspace only, not all saved workspaces. Store backup files carefully because they may contain names and household spending details.</p>
+<h2>Security scope</h2>
+<p>This project is a household expense-sharing aid, not a bank, payment processor, tax service or regulated accounting system. Suggested transfers are calculations only; the application does not move money or verify that a payment occurred.</p>
+<h2>Third-party runtime code</h2>
+<p>The application pages use local project assets and native browser JavaScript. They do not require an external font CDN or third-party JavaScript library to run.</p>
+</section>
+</main>
+<footer class="site-footer"><div class="container footer-bottom-inner"><span>© 2026 Bachelor Finance Manager</span><span>Local-first · Static web application</span></div></footer>
+</body>
+</html>
